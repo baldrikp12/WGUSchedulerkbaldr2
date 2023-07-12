@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import wgu.c192.wguschedulerkbaldr2.R;
 import wgu.c192.wguschedulerkbaldr2.entities.Term;
+import wgu.c192.wguschedulerkbaldr2.R;
 
 public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder> {
 

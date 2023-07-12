@@ -9,8 +9,6 @@ import java.util.concurrent.Executors;
 import wgu.c192.wguschedulerkbaldr2.dao.AssessmentDAO;
 import wgu.c192.wguschedulerkbaldr2.dao.CourseDAO;
 import wgu.c192.wguschedulerkbaldr2.dao.TermDAO;
-import wgu.c192.wguschedulerkbaldr2.entities.Assessment;
-import wgu.c192.wguschedulerkbaldr2.entities.Course;
 import wgu.c192.wguschedulerkbaldr2.entities.Term;
 
 public class Repository {

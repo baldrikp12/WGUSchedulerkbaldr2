@@ -14,17 +14,11 @@
         tools:targetApi="31">
         <activity
             android:name=".ui.TermDetail"
-            android:exported="false" />
-        <activity
-            android:name=".TermDetail"
             android:exported="false"
             android:label="@string/title_activity_term_detail"
             android:theme="@style/Theme.WGUSchedulerkbaldr2" />
         <activity
             android:name=".ui.TermsList"
-            android:exported="false" />
-        <activity
-            android:name=".ui.TermList"
             android:exported="false"
             android:label="@string/title_activity_term_list"
             android:theme="@style/Theme.WGUSchedulerkbaldr2" />
