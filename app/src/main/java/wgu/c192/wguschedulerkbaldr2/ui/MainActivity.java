@@ -1,0 +1,36 @@
+package wgu.c192.wguschedulerkbaldr2.ui;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import wgu.c192.wguschedulerkbaldr2.R;
+import wgu.c192.wguschedulerkbaldr2.database.Repository;
+import wgu.c192.wguschedulerkbaldr2.entities.Term;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        Term term = new Term(0, "summer");
+        Repository repository=new Repository(getApplication());
+        repository.insert(term);
+
+        Button fab=findViewById(R.id.nextButton);
+        fab.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent(MainActivity.this, TermsList.class);
+                startActivity(intent);
+            }
+        });
+    }
+}

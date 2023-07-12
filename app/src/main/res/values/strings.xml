@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">WGUSchedulerkbaldr2</string>
+    <string name="title_activity_term_list">TermList</string>
+    <string name="title_activity_term_detail">TermDetail</string>
+</resources>
