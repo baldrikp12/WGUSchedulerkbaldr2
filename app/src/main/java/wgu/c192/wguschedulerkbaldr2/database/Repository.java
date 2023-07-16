@@ -76,6 +76,17 @@ public class Repository {
 
     }
 
+    public void clear() {
+        databaseExecutor.execute(() -> {
+            mTermDAO.clear();
+        });
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     //same thing for course and assessment
 
 

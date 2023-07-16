@@ -22,13 +22,15 @@ public class MainActivity extends AppCompatActivity {
         Repository repository = new Repository(getApplication());
         repository.insert(term);
 
-        Button fab = findViewById(R.id.nextButton);
-        fab.setOnClickListener(new View.OnClickListener() {
+        Button terms = findViewById(R.id.termsButton);
+        terms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, TermsList.class);
                 startActivity(intent);
             }
         });
+
+
     }
 }

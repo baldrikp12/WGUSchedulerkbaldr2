@@ -1,5 +1,8 @@
 package wgu.c192.wguschedulerkbaldr2.ui;
 
+import android.content.Context;
+import android.content.Intent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -9,12 +12,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import wgu.c192.wguschedulerkbaldr2.entities.Term;
 import wgu.c192.wguschedulerkbaldr2.R;
+import wgu.c192.wguschedulerkbaldr2.entities.Term;
 
 public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder> {
-
+    private final Context context;
+    private final LayoutInflater mInflater;
     private List<Term> mTerms;
+    public TermAdapter(Context context) {
+        mInflater = LayoutInflater.from(context);
+        this.context = context;
+
+    }
 
     /**
      * @param parent   The ViewGroup into which the new View will be added after it is bound to
@@ -25,7 +34,9 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
     @NonNull
     @Override
     public TermAdapter.TermViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        View termItemView = mInflater.inflate(R.layout.term_list_item, parent, false);
+
+        return new TermViewHolder((termItemView));
     }
 
     /**
@@ -35,7 +46,14 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
      */
     @Override
     public void onBindViewHolder(@NonNull TermAdapter.TermViewHolder holder, int position) {
-
+        if (mTerms != null) {
+            System.out.println("not null");
+            Term currentTerm = mTerms.get(position);
+            String name = currentTerm.getTermName();
+            holder.termNameView.setText(name);
+        } else {
+            holder.termNameView.setText("No Terms");
+        }
     }
 
     /**
@@ -65,11 +83,15 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     final Term currentTerm = mTerms.get(position);
-
+                    Intent intent = new Intent(context, TermDetail.class);
+                    intent.putExtra("id", currentTerm.getTermID());
+                    intent.putExtra("name", currentTerm.getTermName());
+                    context.startActivity(intent);
 
                 }
             });
         }
     }
+
 
 }
