@@ -9,6 +9,7 @@ import java.util.concurrent.Executors;
 import wgu.c192.wguschedulerkbaldr2.dao.AssessmentDAO;
 import wgu.c192.wguschedulerkbaldr2.dao.CourseDAO;
 import wgu.c192.wguschedulerkbaldr2.dao.TermDAO;
+import wgu.c192.wguschedulerkbaldr2.entities.Course;
 import wgu.c192.wguschedulerkbaldr2.entities.Term;
 
 public class Repository {
@@ -16,16 +17,19 @@ public class Repository {
     private static int NUMBER_OF_THREADS = 4;
     static final ExecutorService databaseExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
     private TermDAO mTermDAO;
-    private CourseDAO mCourseDAO;
-    private AssessmentDAO assessmentDAO;
     private List<Term> mAllTerms;
+    private CourseDAO mCourseDAO;
+    private List<Course> mAllCourses;
+
+    private AssessmentDAO assessmentDAO;
+
     //private List<Course> mAllCourses;
     //private List<Assessment> mAllAssessments;
 
     public Repository(Application application) {
         SchedulerDatabaseBuilder db = SchedulerDatabaseBuilder.getDatabase(application);
         mTermDAO = db.termDAO();
-        //mCourseDAO = db.courseDAO();
+        mCourseDAO = db.courseDAO();
     }
 
     public List<Term> getAllTerms() {
@@ -64,9 +68,21 @@ public class Repository {
 
     }
 
-    public void delete(Term term) {
+    public List<Course> getAllCourses() {
         databaseExecutor.execute(() -> {
-            mTermDAO.delete(term);
+            mAllCourses = mCourseDAO.getAllCourses();
+        });
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return mAllCourses;
+    }
+
+    public void insert(Course course) {
+        databaseExecutor.execute(() -> {
+            mCourseDAO.insert(course);
         });
         try {
             Thread.sleep(1000);
@@ -76,18 +92,16 @@ public class Repository {
 
     }
 
-    public void clear() {
+    public void update(Course course) {
         databaseExecutor.execute(() -> {
-            mTermDAO.clear();
+            mCourseDAO.update(course);
         });
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
     }
-
-    //same thing for course and assessment
-
 
 }

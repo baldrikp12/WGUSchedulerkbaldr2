@@ -17,20 +17,28 @@ import wgu.c192.wguschedulerkbaldr2.database.Repository;
 import wgu.c192.wguschedulerkbaldr2.entities.Term;
 
 public class TermsList extends AppCompatActivity {
+
     private Repository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_terms_list);
+
         RecyclerView recyclerView = findViewById(R.id.termrecyclerview);
         final TermAdapter termAdapter = new TermAdapter(this);
         recyclerView.setAdapter(termAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         repository = new Repository(getApplication());
         List<Term> allTerms = repository.getAllTerms();
-        FloatingActionButton fab = findViewById(R.id.floatingActionButton);
+
         termAdapter.setTerms(allTerms);
+
+        FloatingActionButton fab = findViewById(R.id.floatingActionButton);
+
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
