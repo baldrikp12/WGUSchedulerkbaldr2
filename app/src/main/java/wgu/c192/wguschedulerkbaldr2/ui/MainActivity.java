@@ -7,10 +7,10 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import wgu.c192.wguschedulerkbaldr2.R;
 import wgu.c192.wguschedulerkbaldr2.database.Repository;
 import wgu.c192.wguschedulerkbaldr2.entities.Course;
 import wgu.c192.wguschedulerkbaldr2.entities.Term;
-import wgu.c192.wguschedulerkbaldr2.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,9 +27,25 @@ public class MainActivity extends AppCompatActivity {
         repository.insert(term);
 
 
-
-
         Button terms = findViewById(R.id.termsButton);
+        terms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, TermsList.class);
+                startActivity(intent);
+            }
+        });
+
+        Button courses = findViewById(R.id.courseButton);
+        courses.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, CourseList.class);
+                startActivity(intent);
+            }
+        });
+
+        Button assessments = findViewById(R.id.assessmentsButton);
         terms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
