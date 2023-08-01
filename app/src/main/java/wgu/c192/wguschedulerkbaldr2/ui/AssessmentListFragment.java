@@ -9,36 +9,36 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import wgu.c192.wguschedulerkbaldr2.R;
 import wgu.c192.wguschedulerkbaldr2.database.Repository;
-import wgu.c192.wguschedulerkbaldr2.entities.Course;
+import wgu.c192.wguschedulerkbaldr2.entities.Assessment;
 
-public class CourseListFragment extends Fragment {
+public class AssessmentListFragment extends Fragment {
 
     private Repository repository;
     private RecyclerView recyclerView;
-    private CourseAdapter courseAdapter;
+    private AssessmentAdapter assessmentAdapter;
 
-    public CourseListFragment() {
+    public AssessmentListFragment() {
         // Required empty public constructor
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_course_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_assessment_list, container, false);
 
-        recyclerView = view.findViewById(R.id.courserecyclerview);
-        courseAdapter = new CourseAdapter(getContext());
-        recyclerView.setAdapter(courseAdapter);
+        recyclerView = view.findViewById(R.id.assessmentrecyclerview);
+        assessmentAdapter = new AssessmentAdapter(getContext());
+        recyclerView.setAdapter(assessmentAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         repository = new Repository(getActivity().getApplication());
-        List<Course> allCourses = repository.getAllCourses(); // Ensure you have a method to get all courses in your Repository
+        List<Assessment> allAssessments = repository.getAllAssessments(); // Ensure you have a method to get all assessments in your Repository
 
-        courseAdapter.setCourses(allCourses); // Ensure you have a setCourses method in your CourseAdapter
+        assessmentAdapter.setAssessments(allAssessments); // Ensure you have a setAssessments method in your AssessmentAdapter
 
 
         return view;

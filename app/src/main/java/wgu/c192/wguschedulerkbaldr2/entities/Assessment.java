@@ -10,6 +10,16 @@ public class Assessment {
     private int assessmentID;
     private String assessmentName;
 
+
+    public Assessment(int assessmentID, String assessmentName) {
+        this.assessmentID = assessmentID;
+        this.assessmentName = assessmentName;
+    }
+
+    public Assessment() {
+
+    }
+
     public int getAssessmentID() {
         return assessmentID;
     }

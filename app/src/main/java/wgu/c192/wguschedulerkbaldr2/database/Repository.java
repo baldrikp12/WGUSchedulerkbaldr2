@@ -9,27 +9,28 @@ import java.util.concurrent.Executors;
 import wgu.c192.wguschedulerkbaldr2.dao.AssessmentDAO;
 import wgu.c192.wguschedulerkbaldr2.dao.CourseDAO;
 import wgu.c192.wguschedulerkbaldr2.dao.TermDAO;
+import wgu.c192.wguschedulerkbaldr2.entities.Assessment;
 import wgu.c192.wguschedulerkbaldr2.entities.Course;
 import wgu.c192.wguschedulerkbaldr2.entities.Term;
 
 public class Repository {
 
-    private static int NUMBER_OF_THREADS = 4;
+    private static final int NUMBER_OF_THREADS = 4;
     static final ExecutorService databaseExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
-    private TermDAO mTermDAO;
+    private final TermDAO mTermDAO;
+    private final CourseDAO mCourseDAO;
     private List<Term> mAllTerms;
-    private CourseDAO mCourseDAO;
     private List<Course> mAllCourses;
 
-    private AssessmentDAO assessmentDAO;
+    private AssessmentDAO mAssessmentDAO;
 
-    //private List<Course> mAllCourses;
-    //private List<Assessment> mAllAssessments;
+    private List<Assessment> mAllAssessments;
 
     public Repository(Application application) {
         SchedulerDatabaseBuilder db = SchedulerDatabaseBuilder.getDatabase(application);
         mTermDAO = db.termDAO();
         mCourseDAO = db.courseDAO();
+        mAssessmentDAO = db.assessmentDAO();
     }
 
     public List<Term> getAllTerms() {
@@ -95,6 +96,42 @@ public class Repository {
     public void update(Course course) {
         databaseExecutor.execute(() -> {
             mCourseDAO.update(course);
+        });
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public List<Assessment> getAllAssessments() {
+        databaseExecutor.execute(() -> {
+            mAllAssessments = mAssessmentDAO.getAllAssessments();
+        });
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return mAllAssessments;
+    }
+
+    public void insert(Assessment assessment) {
+        databaseExecutor.execute(() -> {
+            mAssessmentDAO.insert(assessment);
+        });
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public void update(Assessment assessment) {
+        databaseExecutor.execute(() -> {
+            mAssessmentDAO.update(assessment);
         });
         try {
             Thread.sleep(1000);

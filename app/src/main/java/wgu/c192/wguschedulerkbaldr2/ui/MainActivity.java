@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import wgu.c192.wguschedulerkbaldr2.R;
 import wgu.c192.wguschedulerkbaldr2.database.Repository;
+import wgu.c192.wguschedulerkbaldr2.entities.Assessment;
 import wgu.c192.wguschedulerkbaldr2.entities.Course;
 import wgu.c192.wguschedulerkbaldr2.entities.Term;
 
@@ -21,11 +22,12 @@ public class MainActivity extends AppCompatActivity {
 
         Term term = new Term(0, "summer");
         Course course = new Course(0, "Science");
+        Assessment assessment = new Assessment(0, "HW");
 
         Repository repository = new Repository(getApplication());
-        repository.insert(course);
         repository.insert(term);
-
+        repository.insert(course);
+        repository.insert(assessment);
 
         Button terms = findViewById(R.id.termsButton);
         terms.setOnClickListener(new View.OnClickListener() {
@@ -46,10 +48,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Button assessments = findViewById(R.id.assessmentsButton);
-        terms.setOnClickListener(new View.OnClickListener() {
+        assessments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, TermsList.class);
+                Intent intent = new Intent(MainActivity.this, AssessmentList.class);
                 startActivity(intent);
             }
         });

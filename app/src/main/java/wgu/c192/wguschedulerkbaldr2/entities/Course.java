@@ -1,12 +1,10 @@
 package wgu.c192.wguschedulerkbaldr2.entities;
 
-
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "course")
 public class Course {
-
 
     @PrimaryKey(autoGenerate = true)
     private int courseID;

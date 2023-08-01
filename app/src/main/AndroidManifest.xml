@@ -23,6 +23,11 @@
             android:label="@string/title_activity_term_list"
             android:theme="@style/Theme.WGUSchedulerkbaldr2" />
         <activity
+            android:name=".ui.CourseListFragment"
+            android:exported="false"
+            android:label="CourseFragmentList"
+            android:theme="@style/Theme.WGUSchedulerkbaldr2" />
+        <activity
             android:name=".ui.CourseDetail"
             android:exported="false"
             android:label="CourseDetail"
@@ -31,6 +36,16 @@
             android:name=".ui.CourseList"
             android:exported="false"
             android:label="CourseList"
+            android:theme="@style/Theme.WGUSchedulerkbaldr2" />
+        <activity
+            android:name=".ui.AssessmentListFragment"
+            android:exported="false"
+            android:label="AssessmentFragmentList"
+            android:theme="@style/Theme.WGUSchedulerkbaldr2" />
+        <activity
+            android:name=".ui.AssessmentList"
+            android:exported="false"
+            android:label="AssessmentList"
             android:theme="@style/Theme.WGUSchedulerkbaldr2" />
         <activity
             android:name=".ui.MainActivity"
