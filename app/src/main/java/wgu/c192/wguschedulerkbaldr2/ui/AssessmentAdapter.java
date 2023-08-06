@@ -52,7 +52,7 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.Co
         if (mAssessments != null) {
             System.out.println("not null");
             Assessment currentAssessment = mAssessments.get(position);
-            String name = currentAssessment.getAssessmentName();
+            String name = currentAssessment.getAssessmentTitle();
             holder.assessmentNameView.setText(name);
         } else {
             holder.assessmentNameView.setText("No Terms");
@@ -88,7 +88,7 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.Co
                     final Assessment currentAssessment = mAssessments.get(position);
                     Intent intent = new Intent(context, AssessmentDetail.class);
                     intent.putExtra("id", currentAssessment.getAssessmentID());
-                    intent.putExtra("name", currentAssessment.getAssessmentName());
+                    intent.putExtra("name", currentAssessment.getAssessmentTitle());
                     context.startActivity(intent);
 
                 }

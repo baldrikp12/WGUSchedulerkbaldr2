@@ -50,7 +50,7 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
         if (mTerms != null) {
             System.out.println("not null");
             Term currentTerm = mTerms.get(position);
-            String name = currentTerm.getTermName();
+            String name = currentTerm.getTermTitle();
             holder.termNameView.setText(name);
         } else {
             holder.termNameView.setText("No Terms");
@@ -86,7 +86,7 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
                     final Term currentTerm = mTerms.get(position);
                     Intent intent = new Intent(context, TermDetail.class);
                     intent.putExtra("id", currentTerm.getTermID());
-                    intent.putExtra("name", currentTerm.getTermName());
+                    intent.putExtra("name", currentTerm.getTermTitle());
                     context.startActivity(intent);
 
                 }

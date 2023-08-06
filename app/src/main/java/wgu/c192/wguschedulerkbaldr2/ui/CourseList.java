@@ -8,7 +8,6 @@ import wgu.c192.wguschedulerkbaldr2.R;
 
 public class CourseList extends AppCompatActivity {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

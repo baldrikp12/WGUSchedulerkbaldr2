@@ -51,7 +51,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         if (mCourses != null) {
             System.out.println("not null");
             Course currentCourse = mCourses.get(position);
-            String name = currentCourse.getCourseName();
+            String name = currentCourse.getCourseTitle();
             holder.courseNameView.setText(name);
         } else {
             holder.courseNameView.setText("No Terms");
@@ -87,7 +87,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
                     final Course currentCourse = mCourses.get(position);
                     Intent intent = new Intent(context, CourseDetail.class);
                     intent.putExtra("id", currentCourse.getCourseID());
-                    intent.putExtra("name", currentCourse.getCourseName());
+                    intent.putExtra("name", currentCourse.getCourseTitle());
                     context.startActivity(intent);
 
                 }

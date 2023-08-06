@@ -7,6 +7,9 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import wgu.c192.wguschedulerkbaldr2.R;
 import wgu.c192.wguschedulerkbaldr2.database.Repository;
 import wgu.c192.wguschedulerkbaldr2.entities.Assessment;
@@ -20,14 +23,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Term term = new Term(0, "summer");
-        Course course = new Course(0, "Science");
-        Assessment assessment = new Assessment(0, "HW");
+        //test//
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, 2023);
+        calendar.set(Calendar.MONTH, Calendar.AUGUST);  // Note: Months are 0-based in Java.
+        calendar.set(Calendar.DAY_OF_MONTH, 6);
+        Date dateS = calendar.getTime();
+
+        calendar.set(Calendar.YEAR, 2023);
+        calendar.set(Calendar.MONTH, Calendar.AUGUST);  // Note: Months are 0-based in Java.
+        calendar.set(Calendar.DAY_OF_MONTH, 6);
+        Date dateE = calendar.getTime();
+
+        Term term = new Term("summer", dateS, dateE);
+        Course course = new Course("Science");
+
+        Assessment assessment = new Assessment("HW");
 
         Repository repository = new Repository(getApplication());
         repository.insert(term);
         repository.insert(course);
         repository.insert(assessment);
+
+        //test//
 
         Button terms = findViewById(R.id.termsButton);
         terms.setOnClickListener(new View.OnClickListener() {

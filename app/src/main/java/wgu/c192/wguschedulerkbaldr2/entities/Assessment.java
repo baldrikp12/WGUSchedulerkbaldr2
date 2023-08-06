@@ -1,23 +1,33 @@
 package wgu.c192.wguschedulerkbaldr2.entities;
 
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "assessment")
+@Entity(tableName = "assessment", foreignKeys = {@ForeignKey(entity = Course.class,
+        parentColumns = "courseID",
+        childColumns = "assessmentID",
+        onDelete = ForeignKey.CASCADE)})
 public class Assessment {
 
     @PrimaryKey(autoGenerate = true)
     private int assessmentID;
-    private String assessmentName;
-
-
-    public Assessment(int assessmentID, String assessmentName) {
-        this.assessmentID = assessmentID;
-        this.assessmentName = assessmentName;
+    private String assessmentTitle;
+    private int courseID_F; //Foreign Key
+    public Assessment(String assessmentTitle) {
+        this.assessmentTitle = assessmentTitle;
     }
 
     public Assessment() {
 
+    }
+
+    public int getCourseID_F() {
+        return courseID_F;
+    }
+
+    public void setCourseID_F(int courseID_F) {
+        this.courseID_F = courseID_F;
     }
 
     public int getAssessmentID() {
@@ -28,11 +38,11 @@ public class Assessment {
         this.assessmentID = assessmentID;
     }
 
-    public String getAssessmentName() {
-        return assessmentName;
+    public String getAssessmentTitle() {
+        return assessmentTitle;
     }
 
-    public void setAssessmentName(String assessmentName) {
-        this.assessmentName = assessmentName;
+    public void setAssessmentTitle(String assessmentTitle) {
+        this.assessmentTitle = assessmentTitle;
     }
 }
