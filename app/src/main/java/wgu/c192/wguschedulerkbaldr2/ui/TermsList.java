@@ -36,13 +36,12 @@ public class TermsList extends AppCompatActivity {
 
         termAdapter.setTerms(allTerms);
 
-        FloatingActionButton fab = findViewById(R.id.floatingActionButton);
-
-
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton addTermBtn = findViewById(R.id.floatingActionButton);
+        addTermBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(TermsList.this, MainActivity.class);
+                Intent intent = new Intent(TermsList.this, TermDetail.class);
+                intent.putExtra("MODE_KEY", 1); // or MODE_ADD
                 startActivity(intent);
             }
         });
