@@ -21,14 +21,13 @@ public class TermDetail extends AppCompatActivity {
         //checks if we'll be viewing or adding
         int mode = getIntent().getIntExtra(MODE_KEY, MODE_VIEW);
         if (mode == MODE_VIEW) {
-            System.out.println("We are Adding a Term");
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.termfragmentcontainter, new CourseListFragment())
                         .commit();
             }
         } else if (mode == MODE_ADD) {
-
+            setIntent(null);
         }
 
 

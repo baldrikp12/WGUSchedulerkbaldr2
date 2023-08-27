@@ -30,12 +30,12 @@
         <activity
             android:name=".ui.CourseDetail"
             android:exported="false"
-            android:label="CourseDetail"
+            android:label="Course Details"
             android:theme="@style/Theme.WGUSchedulerkbaldr2" />
         <activity
             android:name=".ui.CourseList"
             android:exported="false"
-            android:label="CourseList"
+            android:label="Courses List"
             android:theme="@style/Theme.WGUSchedulerkbaldr2" />
         <activity
             android:name=".ui.AssessmentListFragment"
@@ -45,7 +45,12 @@
         <activity
             android:name=".ui.AssessmentList"
             android:exported="false"
-            android:label="AssessmentList"
+            android:label="Assessments List"
+            android:theme="@style/Theme.WGUSchedulerkbaldr2" />
+        <activity
+            android:name=".ui.AssessmentDetail"
+            android:exported="false"
+            android:label="Assessment Details"
             android:theme="@style/Theme.WGUSchedulerkbaldr2" />
         <activity
             android:name=".ui.MainActivity"

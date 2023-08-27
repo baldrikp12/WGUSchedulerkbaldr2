@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         //test//
 
-        Calendar calendar = Calendar.getInstance();
+/*      Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, 2023);
         calendar.set(Calendar.MONTH, Calendar.AUGUST);  // Note: Months are 0-based in Java.
         calendar.set(Calendar.DAY_OF_MONTH, 6);
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         Repository repository = new Repository(getApplication());
         repository.insert(term);
         repository.insert(course);
-        repository.insert(assessment);
+        repository.insert(assessment);*/
 
         //test//
 

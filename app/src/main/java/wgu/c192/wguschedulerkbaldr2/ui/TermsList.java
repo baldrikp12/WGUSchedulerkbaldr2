@@ -46,5 +46,13 @@ public class TermsList extends AppCompatActivity {
             }
         });
 
+        FloatingActionButton backFAB = findViewById(R.id.backFAB);
+        backFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
     }
 }
