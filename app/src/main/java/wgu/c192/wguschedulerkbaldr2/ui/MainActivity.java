@@ -7,16 +7,9 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import wgu.c192.wguschedulerkbaldr2.R;
-import wgu.c192.wguschedulerkbaldr2.database.Repository;
-import wgu.c192.wguschedulerkbaldr2.entities.Assessment;
-import wgu.c192.wguschedulerkbaldr2.entities.Course;
-import wgu.c192.wguschedulerkbaldr2.entities.Term;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,34 +40,29 @@ public class MainActivity extends AppCompatActivity {
         repository.insert(assessment);*/
 
         //test//
+        Button termsButton = findViewById(R.id.termsButton);
+        Button courseButton = findViewById(R.id.courseButton);
+        Button assessmentsButton = findViewById(R.id.assessmentsButton);
 
-        Button terms = findViewById(R.id.termsButton);
-        terms.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, TermsList.class);
-                startActivity(intent);
-            }
-        });
+        termsButton.setOnClickListener(this);
+        courseButton.setOnClickListener(this);
+        assessmentsButton.setOnClickListener(this);
+    }
 
-        Button courses = findViewById(R.id.courseButton);
-        courses.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, CourseList.class);
-                startActivity(intent);
-            }
-        });
+    @Override
+    public void onClick(View view) {
+        Intent intent = null;
 
-        Button assessments = findViewById(R.id.assessmentsButton);
-        assessments.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AssessmentList.class);
-                startActivity(intent);
-            }
-        });
+        if (view.getId() == R.id.termsButton) {
+            intent = new Intent(MainActivity.this, TermsList.class);
+        } else if (view.getId() == R.id.courseButton) {
+            intent = new Intent(MainActivity.this, CourseList.class);
+        } else if (view.getId() == R.id.assessmentsButton) {
+            intent = new Intent(MainActivity.this, AssessmentList.class);
+        }
 
-
+        if (intent != null) {
+            startActivity(intent);
+        }
     }
 }

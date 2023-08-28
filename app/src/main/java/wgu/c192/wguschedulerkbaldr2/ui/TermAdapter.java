@@ -83,12 +83,15 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    final Term currentTerm = mTerms.get(position);
-                    Intent intent = new Intent(context, TermDetail.class);
-                    intent.putExtra("id", currentTerm.getTermID());
-                    intent.putExtra("name", currentTerm.getTermTitle());
-                    context.startActivity(intent);
+                    if (position != RecyclerView.NO_POSITION) {
+                        Term currentTerm = mTerms.get(position);
 
+                        // Pass the term ID to the TermDetail activity
+                        Intent intent = new Intent(context, TermDetail.class);
+                        intent.putExtra(TermDetail.MODE_KEY, TermDetail.MODE_VIEW);
+                        intent.putExtra("TERM_ID", currentTerm.getTermID());
+                        context.startActivity(intent);
+                    }
                 }
             });
         }

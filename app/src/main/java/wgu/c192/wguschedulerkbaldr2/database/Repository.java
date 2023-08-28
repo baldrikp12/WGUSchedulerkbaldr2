@@ -20,6 +20,7 @@ public class Repository {
     private final TermDAO mTermDAO;
     private final CourseDAO mCourseDAO;
     private List<Term> mAllTerms;
+    private Term mTerm;
     private List<Course> mAllCourses;
 
     private AssessmentDAO mAssessmentDAO;
@@ -68,6 +69,18 @@ public class Repository {
         }
 
     }
+    public Term getAssociatedTerm(int termId) {
+        databaseExecutor.execute(() -> {
+            mTerm = mTermDAO.getAssociatedTerm(termId);
+        });
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return mTerm;
+    }
+
 
     public List<Course> getAllCourses() {
         databaseExecutor.execute(() -> {
@@ -140,5 +153,6 @@ public class Repository {
         }
 
     }
+
 
 }
