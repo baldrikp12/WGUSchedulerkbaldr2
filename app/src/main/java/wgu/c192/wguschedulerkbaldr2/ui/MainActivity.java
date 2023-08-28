@@ -18,7 +18,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //test//
 
-/*      Calendar calendar = Calendar.getInstance();
+/*
+        TODO: do same to Course;
+        TODO: do same to assessment;
+        TODO: clean up UI: View/Add/Edit;
+        TODO: add action bar to detail views include option to Edit;
+        TODO: add Notes to assessments;
+        TODO: implement sharing of notes;
+        TODO: revise the use of List to Arraylist;
+        TODO: implement the alerts for start and end dates;
+        TODO: alert will be stored in database as an int: 0=none;1=start;2=end;3=both;
+        TODO: fix UI;
+ */
+/*
+        Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, 2023);
         calendar.set(Calendar.MONTH, Calendar.AUGUST);  // Note: Months are 0-based in Java.
         calendar.set(Calendar.DAY_OF_MONTH, 6);
@@ -37,9 +50,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Repository repository = new Repository(getApplication());
         repository.insert(term);
         repository.insert(course);
-        repository.insert(assessment);*/
+        repository.insert(assessment);
 
         //test//
+
+*/
+
+
+
+
         Button termsButton = findViewById(R.id.termsButton);
         Button courseButton = findViewById(R.id.courseButton);
         Button assessmentsButton = findViewById(R.id.assessmentsButton);
@@ -66,3 +85,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 }
+
