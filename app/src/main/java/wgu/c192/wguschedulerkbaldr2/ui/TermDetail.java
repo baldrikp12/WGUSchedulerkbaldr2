@@ -1,5 +1,6 @@
 package wgu.c192.wguschedulerkbaldr2.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -29,53 +30,63 @@ public class TermDetail extends AppCompatActivity {
         setContentView(R.layout.activity_term_detail);
 
         int termId = getIntent().getIntExtra("TERM_ID", -1);
+        int mode = getIntent().getIntExtra(MODE_KEY, MODE_VIEW);
+
+        termTitleEditText = findViewById(R.id.termTitleTextview);
+        addTermButton = findViewById(R.id.addBtn);
+
+        // Assuming selectedTerm is initially null
+        Term selectedTerm = null;
+
         if (termId != -1) {
             // Use the term ID to query the database and retrieve the corresponding term's data
             Repository repository = new Repository(getApplication());
-            Term selectedTerm = repository.getAssociatedTerm(termId);
+            selectedTerm = repository.getAssociatedTerm(termId);
+        }
 
-            termTitleEditText = findViewById(R.id.termTitleTextview);
-            addTermButton = findViewById(R.id.addBtn);
-
-            int mode = getIntent().getIntExtra(MODE_KEY, MODE_VIEW);
-
-            if (mode == MODE_VIEW && selectedTerm != null) {
-                termTitleEditText.setText(selectedTerm.getTermTitle());
-                // Initialize your fragment or other UI for viewing mode if needed
-            } else if (mode == MODE_ADD) {
-                setViewToEdit();
-            }
+        if (mode == MODE_VIEW && selectedTerm != null) {
+            termTitleEditText.setText(selectedTerm.getTermTitle());
+            termTitleEditText.setEnabled(false);
+            addTermButton.setVisibility(View.INVISIBLE);
+            // Initialize your fragment or other UI for viewing mode if needed
+        } else if (mode == MODE_ADD) {
+            termTitleEditText.setEnabled(true); // Enable EditText for editing
+            addTermButton.setVisibility(View.VISIBLE);
         }
     }
 
-    private void setViewToEdit() {
-        termTitleEditText.setEnabled(true); // Enable EditText for editing
-        addTermButton.setVisibility(View.VISIBLE);
+    public void addTerm(View view) {
+        EditText titleText = findViewById(R.id.termTitleTextview);
+        String title = (String) titleText.getText().toString();
+        if (!title.isEmpty()) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR, 2023);
+            calendar.set(Calendar.MONTH, Calendar.AUGUST);
+            calendar.set(Calendar.DAY_OF_MONTH, 6);
+            Date dateS = calendar.getTime();
 
-        addTermButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String title = termTitleEditText.getText().toString();
+            calendar.set(Calendar.YEAR, 2023);
+            calendar.set(Calendar.MONTH, Calendar.AUGUST);
+            calendar.set(Calendar.DAY_OF_MONTH, 6);
+            Date dateE = calendar.getTime();
 
-                // Create new term
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.YEAR, 2023);
-                calendar.set(Calendar.MONTH, Calendar.AUGUST);
-                calendar.set(Calendar.DAY_OF_MONTH, 6);
-                Date startDate = calendar.getTime();
+            Term term = new Term(title, dateS, dateE);
+            Repository repository = new Repository(getApplication());
+            repository.insert(term);
 
-                calendar.set(Calendar.YEAR, 2023);
-                calendar.set(Calendar.MONTH, Calendar.AUGUST);
-                calendar.set(Calendar.DAY_OF_MONTH, 6);
-                Date endDate = calendar.getTime();
+            // After adding the term, switch to viewing mode by starting a new instance of the activity
+            Intent viewIntent = new Intent(TermDetail.this, TermsList.class);
 
-                Term term = new Term(title, startDate, endDate);
-                Repository repository = new Repository(getApplication());
-                repository.insert(term);
+            viewIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-                termTitleEditText.setEnabled(false); // Disable EditText
-                addTermButton.setVisibility(View.INVISIBLE);
-            }
-        });
+            startActivity(viewIntent);
+
+            // Finish the current activity (optional, depending on your workflow)
+            finish();
+        } else {
+            // Display a message to the user indicating that the title is required.
+            // You can use a Toast or another UI element for this purpose.
+        }
+
     }
 }

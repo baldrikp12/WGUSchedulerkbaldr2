@@ -39,7 +39,7 @@ public class Repository {
             mAllTerms = mTermDAO.getAllTerms();
         });
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -51,7 +51,7 @@ public class Repository {
             mTermDAO.insert(term);
         });
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -63,7 +63,7 @@ public class Repository {
             mTermDAO.update(term);
         });
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -74,7 +74,7 @@ public class Repository {
             mTerm = mTermDAO.getAssociatedTerm(termId);
         });
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -87,7 +87,7 @@ public class Repository {
             mAllCourses = mCourseDAO.getAllCourses();
         });
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -99,7 +99,7 @@ public class Repository {
             mCourseDAO.insert(course);
         });
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -111,7 +111,7 @@ public class Repository {
             mCourseDAO.update(course);
         });
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -123,7 +123,7 @@ public class Repository {
             mAllAssessments = mAssessmentDAO.getAllAssessments();
         });
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -135,7 +135,7 @@ public class Repository {
             mAssessmentDAO.insert(assessment);
         });
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -147,12 +147,11 @@ public class Repository {
             mAssessmentDAO.update(assessment);
         });
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
     }
-
 
 }

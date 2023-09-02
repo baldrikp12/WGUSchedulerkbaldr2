@@ -7,7 +7,14 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import wgu.c192.wguschedulerkbaldr2.R;
+import wgu.c192.wguschedulerkbaldr2.database.Repository;
+import wgu.c192.wguschedulerkbaldr2.entities.Assessment;
+import wgu.c192.wguschedulerkbaldr2.entities.Course;
+import wgu.c192.wguschedulerkbaldr2.entities.Term;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -30,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TODO: alert will be stored in database as an int: 0=none;1=start;2=end;3=both;
         TODO: fix UI;
  */
-/*
+///*
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, 2023);
         calendar.set(Calendar.MONTH, Calendar.AUGUST);  // Note: Months are 0-based in Java.
@@ -52,9 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         repository.insert(course);
         repository.insert(assessment);
 
-        //test//
-
-*/
+        //test//*/
 
 
 
