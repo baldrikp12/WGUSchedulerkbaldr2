@@ -60,9 +60,6 @@ public class TermDetail extends AppCompatActivity {
         String title = (String) titleText.getText().toString();
         if (!title.isEmpty()) {
             Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.YEAR, 2023);
-            calendar.set(Calendar.MONTH, Calendar.AUGUST);
-            calendar.set(Calendar.DAY_OF_MONTH, 6);
             Date dateS = calendar.getTime();
 
             calendar.set(Calendar.YEAR, 2023);

@@ -48,7 +48,6 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
     @Override
     public void onBindViewHolder(@NonNull TermAdapter.TermViewHolder holder, int position) {
         if (mTerms != null) {
-            System.out.println("not null");
             Term currentTerm = mTerms.get(position);
             String name = currentTerm.getTermTitle();
             holder.termNameView.setText(name);

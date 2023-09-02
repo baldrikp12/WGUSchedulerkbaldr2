@@ -23,10 +23,10 @@ public interface TermDAO {
     @Delete
     void delete(Term term);
 
-    @Query("SELECT * FROM TERM ORDER BY termID ASC")
+    @Query("SELECT * FROM TERM ORDER BY startDate DESC")
     List<Term> getAllTerms();
 
-    @Query("SELECT * FROM TERM WHERE termID = :termID ORDER BY termID ASC")
+    @Query("SELECT * FROM TERM WHERE termID = :termID")
     Term getAssociatedTerm(int termID);
 
 }
