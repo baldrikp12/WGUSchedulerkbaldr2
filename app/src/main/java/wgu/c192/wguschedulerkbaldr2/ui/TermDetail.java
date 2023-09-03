@@ -21,9 +21,6 @@ public class TermDetail extends AppCompatActivity {
     public static final int MODE_VIEW = 0;
     public static final int MODE_ADD = 1;
 
-    private EditText termTitleEditText;
-    private Button addTermButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,26 +29,33 @@ public class TermDetail extends AppCompatActivity {
         int termId = getIntent().getIntExtra("TERM_ID", -1);
         int mode = getIntent().getIntExtra(MODE_KEY, MODE_VIEW);
 
-        termTitleEditText = findViewById(R.id.termTitleTextview);
-        addTermButton = findViewById(R.id.addBtn);
+        EditText termTitleEditText = findViewById(R.id.termTitleTextview);
+        Button addTermButton = findViewById(R.id.addBtn);
+        Button cancelTermButton = findViewById(R.id.cancelBtn);
 
         // Assuming selectedTerm is initially null
         Term selectedTerm = null;
 
-        if (termId != -1) {
+
+        if (mode == MODE_VIEW && selectedTerm != null && termId != -1) {
+
+
             // Use the term ID to query the database and retrieve the corresponding term's data
             Repository repository = new Repository(getApplication());
             selectedTerm = repository.getAssociatedTerm(termId);
-        }
 
-        if (mode == MODE_VIEW && selectedTerm != null) {
             termTitleEditText.setText(selectedTerm.getTermTitle());
             termTitleEditText.setEnabled(false);
+
             addTermButton.setVisibility(View.INVISIBLE);
-            // Initialize your fragment or other UI for viewing mode if needed
+            cancelTermButton.setVisibility(View.INVISIBLE);
+
+
         } else if (mode == MODE_ADD) {
+
             termTitleEditText.setEnabled(true); // Enable EditText for editing
             addTermButton.setVisibility(View.VISIBLE);
+            cancelTermButton.setVisibility(View.VISIBLE);
         }
     }
 
