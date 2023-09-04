@@ -15,7 +15,6 @@ public class CourseList extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_course_list);
 
         if (savedInstanceState == null) {

@@ -69,6 +69,7 @@ public class Repository {
         }
 
     }
+
     public Term getAssociatedTerm(int termId) {
         databaseExecutor.execute(() -> {
             mTerm = mTermDAO.getAssociatedTerm(termId);
@@ -115,7 +116,18 @@ public class Repository {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    public List<Course> getCoursesByTermID(int termID) {
+        databaseExecutor.execute(() -> {
+            mAllCourses = mCourseDAO.getCoursesByTermID(termID);
+        });
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return mAllCourses;
     }
 
     public List<Assessment> getAllAssessments() {

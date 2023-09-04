@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -52,11 +53,24 @@ public class TermDetail extends AppCompatActivity {
         } else if (mode == MODE_ADD) {
             setAddMode();
         }
+
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.termfragmentcontainter, new CourseListFragment())
+                    .commit();
+        }
     }
 
     private void setViewMode(Term term) {
         termTitleEditText.setText(term.getTermTitle());
         termTitleEditText.setEnabled(false);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        CourseListFragment fragment = (CourseListFragment) fragmentManager.findFragmentById(R.id.termfragmentcontainter);
+        Bundle args = new Bundle();
+        args.putInt("termID", term.getTermID());
+        System.out.println("+++++++++++++++++++++++++++++++++++++termDetail"+args.get("termID"));
+        fragment.setArguments(args);
 
         addTermButton.setVisibility(View.INVISIBLE);
         cancelTermButton.setVisibility(View.INVISIBLE);
@@ -66,6 +80,7 @@ public class TermDetail extends AppCompatActivity {
         termTitleEditText.setEnabled(true); // Enable EditText for editing
         addTermButton.setVisibility(View.VISIBLE);
         cancelTermButton.setVisibility(View.VISIBLE);
+
     }
 
     public void addTerm(View view) {
