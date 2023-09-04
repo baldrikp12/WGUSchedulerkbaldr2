@@ -7,61 +7,90 @@
     tools:context=".ui.TermDetail"
     tools:layout_editor_absoluteY="81dp">
 
-    <FrameLayout
-        android:id="@+id/termfragmentcontainter"
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="80dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
-
-    </FrameLayout>
-
     <TextView
-        android:id="@+id/textView12"
+        android:id="@+id/editTextDate2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        android:text="END DATE:"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:focusable="false"
+        android:text="01/02/2023"
+        android:textColor="#0027FF"
+        android:textSize="24sp"
         android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/textView12"
+        app:layout_constraintTop_toBottomOf="@+id/editTextDate4" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/username_text_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:focusable="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/termTitleTextview" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/termTitleTextview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:gravity="center"
+            android:hint="TERM TITLE"
+            android:inputType="text"
+            android:lines="1"
+            android:maxLines="1"
+            android:minWidth="100dp"
+            android:textSize="34sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:text="START DATE:"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/termTitleTextview" />
+        app:layout_constraintTop_toBottomOf="@+id/username_text_input_layout" />
 
-    <EditText
-        android:id="@+id/termTitleTextview"
+    <TextView
+        android:id="@+id/editTextDate4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:inputType="text"
-        android:maxLines="1"
-        android:minWidth="100dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:focusable="false"
+        android:text="01/02/2023"
+        android:textColor="#0027FF"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/textView11"
+        app:layout_constraintTop_toBottomOf="@+id/username_text_input_layout" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="16dp"
+        android:text="END DATE:"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
     <Button
         android:id="@+id/addBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:onClick="addTerm"
         android:text="Add"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -72,37 +101,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:text="Cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/editTextDate2"
-        android:layout_width="wrap_content"
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:editable="false"
-        android:inputType="date"
-        android:text="01/02/2023"
-        android:textColor="#0027FF"
-        android:textSize="12sp"
-        android:textStyle="bold"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView12" />
+        app:layout_constraintTop_toBottomOf="@+id/textView16">
 
-    <EditText
-        android:id="@+id/editTextDate4"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/termfragmentcontainter"
+            android:name="wgu.c192.wguschedulerkbaldr2.ui.CourseListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            tools:layout="@layout/fragment_course_list">
+
+        </androidx.fragment.app.FragmentContainerView>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/textView16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:editable="false"
-        android:inputType="date"
-        android:text="01/02/2023"
-        android:textColor="#0027FF"
-        android:textSize="12sp"
-        android:textStyle="bold"
+        android:layout_marginTop="32dp"
+        android:text="Course(s)"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+        app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

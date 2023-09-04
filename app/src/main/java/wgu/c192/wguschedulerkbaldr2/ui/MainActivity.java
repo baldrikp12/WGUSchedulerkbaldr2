@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TODO: alert will be stored in database as an int: 0=none;1=start;2=end;3=both;
         TODO: fix UI;
  */
-///*
+/*
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, 2023);
         calendar.set(Calendar.MONTH, Calendar.AUGUST);  // Note: Months are 0-based in Java.

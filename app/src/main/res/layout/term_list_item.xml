@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:cardCornerRadius="8dp"
-            app:cardElevation="4dp">
+            app:cardElevation="3dp">
 
             <!-- Views for the second CardView -->
             <!-- Add your content here -->
@@ -32,7 +32,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center|right|center_vertical"
                 android:orientation="vertical"
-                tools:padding="16dp">
+                tools:padding="5dp">
 
                 <TextView
                     android:id="@+id/textView8"
@@ -56,17 +56,16 @@
             android:layout_width="229dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            app:cardBackgroundColor="#AEE47F"
             app:cardCornerRadius="8dp"
-            app:cardElevation="4dp">
+            app:cardElevation="5dp">
 
             <!-- Nested LinearLayout for TextViews -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-                <!-- TextView for Title -->
                 <TextView
                     android:id="@+id/termNameLabel"
                     android:layout_width="wrap_content"
@@ -75,15 +74,25 @@
                     android:textColor="@android:color/black"
                     android:textSize="18sp" />
 
-                <!-- TextView for Description -->
-                <TextView
-                    android:id="@+id/textViewDescription"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Description"
-                    android:textColor="@android:color/darker_gray"
-                    android:textSize="14sp" />
+                    android:orientation="vertical"
+                    android:padding="5dp">
 
+                    <!-- TextView for Title -->
+
+                    <!-- TextView for Description -->
+
+                    <TextView
+                        android:id="@+id/textViewDescription"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Description"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>

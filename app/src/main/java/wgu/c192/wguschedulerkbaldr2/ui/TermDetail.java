@@ -21,6 +21,10 @@ public class TermDetail extends AppCompatActivity {
     public static final int MODE_VIEW = 0;
     public static final int MODE_ADD = 1;
 
+    private EditText termTitleEditText;
+    private Button addTermButton;
+    private Button cancelTermButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,39 +33,44 @@ public class TermDetail extends AppCompatActivity {
         int termId = getIntent().getIntExtra("TERM_ID", -1);
         int mode = getIntent().getIntExtra(MODE_KEY, MODE_VIEW);
 
-        EditText termTitleEditText = findViewById(R.id.termTitleTextview);
-        Button addTermButton = findViewById(R.id.addBtn);
-        Button cancelTermButton = findViewById(R.id.cancelBtn);
+        termTitleEditText = findViewById(R.id.termTitleTextview);
+        addTermButton = findViewById(R.id.addBtn);
+        cancelTermButton = findViewById(R.id.cancelBtn);
 
         // Assuming selectedTerm is initially null
         Term selectedTerm = null;
 
-
-        if (mode == MODE_VIEW && selectedTerm != null && termId != -1) {
-
-
+        if (termId != -1) {
             // Use the term ID to query the database and retrieve the corresponding term's data
             Repository repository = new Repository(getApplication());
             selectedTerm = repository.getAssociatedTerm(termId);
-
-            termTitleEditText.setText(selectedTerm.getTermTitle());
-            termTitleEditText.setEnabled(false);
-
-            addTermButton.setVisibility(View.INVISIBLE);
-            cancelTermButton.setVisibility(View.INVISIBLE);
-
-
-        } else if (mode == MODE_ADD) {
-
-            termTitleEditText.setEnabled(true); // Enable EditText for editing
-            addTermButton.setVisibility(View.VISIBLE);
-            cancelTermButton.setVisibility(View.VISIBLE);
         }
+
+        // Call the appropriate method based on the mode
+        if (mode == MODE_VIEW && selectedTerm != null) {
+            setViewMode(selectedTerm);
+        } else if (mode == MODE_ADD) {
+            setAddMode();
+        }
+    }
+
+    private void setViewMode(Term term) {
+        termTitleEditText.setText(term.getTermTitle());
+        termTitleEditText.setEnabled(false);
+
+        addTermButton.setVisibility(View.INVISIBLE);
+        cancelTermButton.setVisibility(View.INVISIBLE);
+    }
+
+    private void setAddMode() {
+        termTitleEditText.setEnabled(true); // Enable EditText for editing
+        addTermButton.setVisibility(View.VISIBLE);
+        cancelTermButton.setVisibility(View.VISIBLE);
     }
 
     public void addTerm(View view) {
         EditText titleText = findViewById(R.id.termTitleTextview);
-        String title = (String) titleText.getText().toString();
+        String title = titleText.getText().toString().trim();
         if (!title.isEmpty()) {
             Calendar calendar = Calendar.getInstance();
             Date dateS = calendar.getTime();
@@ -77,6 +86,8 @@ public class TermDetail extends AppCompatActivity {
 
             // After adding the term, switch to viewing mode by starting a new instance of the activity
             Intent viewIntent = new Intent(TermDetail.this, TermsList.class);
+            viewIntent.putExtra(MODE_KEY, MODE_VIEW);
+            viewIntent.putExtra("TERM_ID", term.getTermID());
 
             viewIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
@@ -88,6 +99,5 @@ public class TermDetail extends AppCompatActivity {
             // Display a message to the user indicating that the title is required.
             // You can use a Toast or another UI element for this purpose.
         }
-
     }
 }
