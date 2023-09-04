@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import wgu.c192.wguschedulerkbaldr2.R;
 import wgu.c192.wguschedulerkbaldr2.database.Repository;
@@ -46,12 +45,13 @@ public class CourseListFragment extends Fragment {
         }
         List<Course> allCourses;
 
-        if(termID == -1) {
+        if (termID == -1) {
             allCourses = repository.getAllCourses();
         } else {
             allCourses = repository.getCoursesByTermID(termID);
         }
         courseAdapter.setCourses(allCourses);
+        courseAdapter.notifyDataSetChanged();
 
         return view;
     }

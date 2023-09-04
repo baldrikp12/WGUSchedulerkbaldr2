@@ -54,11 +54,6 @@ public class TermDetail extends AppCompatActivity {
             setAddMode();
         }
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.termfragmentcontainter, new CourseListFragment())
-                    .commit();
-        }
     }
 
     private void setViewMode(Term term) {
