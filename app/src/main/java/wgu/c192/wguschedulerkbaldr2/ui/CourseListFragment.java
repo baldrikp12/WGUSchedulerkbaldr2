@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import wgu.c192.wguschedulerkbaldr2.R;
@@ -43,9 +44,11 @@ public class CourseListFragment extends Fragment {
             termID = arguments.getInt("termID");
 
         }
-        List<Course> allCourses;
+        List<Course> allCourses = new ArrayList<>();
 
         if (termID == -1) {
+
+        } else if (termID == 0) {
             allCourses = repository.getAllCourses();
         } else {
             allCourses = repository.getCoursesByTermID(termID);
