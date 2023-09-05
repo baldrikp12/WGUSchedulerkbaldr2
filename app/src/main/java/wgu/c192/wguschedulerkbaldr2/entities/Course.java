@@ -14,8 +14,8 @@ public class Course {
     @NonNull
     private int courseID;
     private String courseTitle;
-    private Date courseStart;
-    private Date courseEnd;
+    private String courseStart;
+    private String courseEnd;
     private String instName;
     private String instNumber;
     private String instEmail;
@@ -29,19 +29,19 @@ public class Course {
 
     }
 
-    public Date getCourseStart() {
+    public String getCourseStart() {
         return courseStart;
     }
 
-    public void setCourseStart(Date courseStart) {
+    public void setCourseStart(String courseStart) {
         this.courseStart = courseStart;
     }
 
-    public Date getCourseEnd() {
+    public String getCourseEnd() {
         return courseEnd;
     }
 
-    public void setCourseEnd(Date courseEnd) {
+    public void setCourseEnd(String courseEnd) {
         this.courseEnd = courseEnd;
     }
 

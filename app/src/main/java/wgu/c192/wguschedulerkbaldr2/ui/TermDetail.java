@@ -89,8 +89,8 @@ public class TermDetail extends AppCompatActivity {
         fragment.setArguments(args);
 
         termTitleEditText.setFocusable(false);
-        startDate.setFocusable(false);
-        endDate.setFocusable(false);
+        //startDate.setFocusable(false);
+        //endDate.setFocusable(false);
         addTermButton.setVisibility(View.INVISIBLE);
         cancelTermButton.setVisibility(View.INVISIBLE);
     }
@@ -146,7 +146,7 @@ public class TermDetail extends AppCompatActivity {
             calendar.set(Calendar.DAY_OF_MONTH, 6);
             Date dateE = calendar.getTime();
 
-            Term term = new Term(title, dateS, dateE);
+            Term term = new Term(title, startDate.getText().toString(), endDate.getText().toString());
             Repository repository = new Repository(getApplication());
             repository.insert(term);
 

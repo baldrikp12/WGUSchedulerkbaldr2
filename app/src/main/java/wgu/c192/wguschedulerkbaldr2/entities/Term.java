@@ -14,12 +14,12 @@ public class Term {
     private int termID;
     private String termTitle;
     @NonNull
-    private Date startDate;
+    private String startDate;
     @NonNull
-    private Date endDate;
+    private String endDate;
 
 
-    public Term(String termTitle, Date startDate, Date endDate) {
+    public Term(String termTitle, String startDate, String endDate) {
         this.termTitle = termTitle;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -45,19 +45,19 @@ public class Term {
         this.termTitle = termTitle;
     }
 
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 }
