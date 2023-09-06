@@ -50,9 +50,16 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
         if (mTerms != null) {
             Term currentTerm = mTerms.get(position);
             String name = currentTerm.getTermTitle();
+            String start = currentTerm.getStartDate();
+            String end = currentTerm.getEndDate();
             holder.termNameView.setText(name);
+            holder.startDateView.setText(start);
+            holder.endDateView.setText(end);
+
         } else {
-            holder.termNameView.setText("No Terms");
+            holder.termNameView.setText("N/A");
+            holder.startDateView.setText("N/A");
+            holder.endDateView.setText("N/A");
         }
     }
 
@@ -71,10 +78,14 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
 
     class TermViewHolder extends RecyclerView.ViewHolder {
         private final TextView termNameView;
+        private final TextView startDateView;
+        private final TextView endDateView;
 
         private TermViewHolder(View itemView) {
             super(itemView);
             termNameView = itemView.findViewById(R.id.termNameLabel);
+            startDateView = itemView.findViewById(R.id.startDateLabel);
+            endDateView = itemView.findViewById(R.id.endDateLabel);
             itemView.setOnClickListener(new View.OnClickListener() {
                 /**
                  * @param v The view that was clicked.

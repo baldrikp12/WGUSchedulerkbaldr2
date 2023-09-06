@@ -18,7 +18,6 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import wgu.c192.wguschedulerkbaldr2.R;
@@ -31,6 +30,9 @@ public class TermDetail extends AppCompatActivity {
     public static final int MODE_VIEW = 0;
     public static final int MODE_ADD = 1;
 
+    public static final int MODE_EDIT = 2;
+    // Initialize selectedTerm as null
+    private Term selectedTerm = null;
     private TextInputLayout term_text_input_layout;
     private EditText termTitleEditText;
     private Button addTermButton;
@@ -56,8 +58,6 @@ public class TermDetail extends AppCompatActivity {
         startDate = findViewById(R.id.termStartDateLabel);
         endDate = findViewById(R.id.termEndDateLabel);
 
-        // Initialize selectedTerm as null
-        Term selectedTerm = null;
 
         if (termId != -1) {
             // Retrieve the term data if the termId is valid
@@ -70,6 +70,8 @@ public class TermDetail extends AppCompatActivity {
             setViewMode(selectedTerm);
         } else if (mode == MODE_ADD) {
             setAddMode();
+        } else {
+            setEditMode(selectedTerm);
         }
 
         // Initialize DatePickerDialogs
@@ -78,8 +80,8 @@ public class TermDetail extends AppCompatActivity {
 
     private void setViewMode(Term term) {
         termTitleEditText.setText(term.getTermTitle());
-        startDate.setText(term.getStartDate().toString());
-        endDate.setText(term.getEndDate().toString());
+        startDate.setText(term.getStartDate());
+        endDate.setText(term.getEndDate());
 
         // Find the CourseListFragment and pass termID as an argument
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -134,29 +136,32 @@ public class TermDetail extends AppCompatActivity {
         return datePickerDialog;
     }
 
-    public void addTerm(View view) {
-        EditText titleText = findViewById(R.id.termTitleTextview);
-        String title = titleText.getText().toString().trim();
-        if (!title.isEmpty()) {
-            Calendar calendar = Calendar.getInstance();
-            Date dateS = calendar.getTime();
+    public void addOrEditTerm(View view) {
 
-            calendar.set(Calendar.YEAR, 2023);
-            calendar.set(Calendar.MONTH, Calendar.AUGUST);
-            calendar.set(Calendar.DAY_OF_MONTH, 6);
-            Date dateE = calendar.getTime();
 
-            Term term = new Term(title, startDate.getText().toString(), endDate.getText().toString());
+        if (!termTitleEditText.getText().toString().trim().isEmpty()) {
+
+            String newTitle = termTitleEditText.getText().toString().trim(); //Title
+            String newStartDate = startDate.getText().toString(); //start date
+            String newEndDate = endDate.getText().toString(); //end date
+
             Repository repository = new Repository(getApplication());
-            repository.insert(term);
+
+            if (isAddMode()) {
+                Term term = new Term(newTitle, newStartDate, newEndDate);
+                repository.insert(term);
+            }
+            if (isEditMode()) {
+                selectedTerm.setTermTitle(newTitle);
+                selectedTerm.setStartDate(newStartDate);
+                selectedTerm.setEndDate(newEndDate);
+                repository.update(selectedTerm);
+            }
+
 
             // After adding the term, switch to viewing mode by starting a new instance of the activity
             Intent viewIntent = new Intent(TermDetail.this, TermsList.class);
-            viewIntent.putExtra(MODE_KEY, MODE_VIEW);
-            viewIntent.putExtra("TERM_ID", term.getTermID());
-
             viewIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
             startActivity(viewIntent);
 
             // Finish the current activity (optional, depending on your workflow)
@@ -170,20 +175,41 @@ public class TermDetail extends AppCompatActivity {
     }
 
     public void onStartDateLabelClick(View view) {
-        if (isEditMode()) {
+        if (isEditMode() || isAddMode()) {
             // Show the start date picker dialog
             startDatePicker.show();
         }
     }
 
     public void onEndDateLabelClick(View view) {
-        if (isEditMode()) {
+        if (isEditMode() || isAddMode()) {
             // Show the end date picker dialog
             endDatePicker.show();
         }
     }
 
     private boolean isEditMode() {
+        // Check if the activity is in edit or add mode, return true if so
+        int mode = getIntent().getIntExtra(MODE_KEY, MODE_VIEW);
+        return mode == MODE_EDIT;
+    }
+
+    private void setEditMode(Term term) {
+        termTitleEditText.setText(term.getTermTitle());
+        startDate.setText(term.getStartDate());
+        endDate.setText(term.getEndDate());
+
+        // Find the CourseListFragment and pass termID as an argument
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        CourseListFragment fragment = (CourseListFragment) fragmentManager.findFragmentById(R.id.termfragmentcontainter);
+        Bundle args = new Bundle();
+        args.putInt("termID", term.getTermID());
+        fragment.setArguments(args);
+
+        setAddMode(); //simply activates all the fields to edit.
+    }
+
+    private boolean isAddMode() {
         // Check if the activity is in edit or add mode, return true if so
         int mode = getIntent().getIntExtra(MODE_KEY, MODE_VIEW);
         return mode == MODE_ADD;
