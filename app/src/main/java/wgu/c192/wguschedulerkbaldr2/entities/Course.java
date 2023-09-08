@@ -5,8 +5,6 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-import java.util.Date;
-
 @Entity(tableName = "course", foreignKeys = {@ForeignKey(entity = Term.class, parentColumns = "termID", childColumns = "courseID", onDelete = ForeignKey.CASCADE)})
 public class Course {
 
@@ -21,8 +19,10 @@ public class Course {
     private String instEmail;
     private int termID_f; //Foreign Key
 
-    public Course(String courseTitle) {
+    public Course(String courseTitle, String startDate, String endDate) {
         this.courseTitle = courseTitle;
+        this.courseStart = startDate;
+        this.courseEnd = endDate;
     }
 
     public Course() {

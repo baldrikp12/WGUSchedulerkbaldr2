@@ -10,6 +10,7 @@ import androidx.room.Update;
 import java.util.List;
 
 import wgu.c192.wguschedulerkbaldr2.entities.Course;
+import wgu.c192.wguschedulerkbaldr2.entities.Term;
 
 @Dao
 public interface CourseDAO {
@@ -26,8 +27,8 @@ public interface CourseDAO {
     @Query("SELECT * FROM COURSE ORDER BY courseID ASC")
     List<Course> getAllCourses();
 
-    @Query("SELECT * FROM COURSE WHERE courseID = :courseID ORDER BY courseID ASC")
-    List<Course> getAssociatedCourse(int courseID);
+    @Query("SELECT * FROM COURSE WHERE courseID = :courseID")
+    Course getAssociatedCourse(int courseID);
 
     @Query("SELECT * FROM COURSE WHERE termID_f = :termID")
     List<Course> getCoursesByTermID(int termID);

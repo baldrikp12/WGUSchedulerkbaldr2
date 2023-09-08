@@ -39,19 +39,17 @@ public class CourseListFragment extends Fragment {
 
         Bundle arguments = this.getArguments();
 
-        int termID = -1;
+        int termID = 0;
         if (arguments != null) {
             termID = arguments.getInt("termID");
 
         }
         List<Course> allCourses = new ArrayList<>();
 
-        if (termID == -1) {
-
-        } else if (termID == 0) {
-            allCourses = repository.getAllCourses();
+        if (termID == 0) {
+            allCourses.addAll(repository.getAllCourses());
         } else {
-            allCourses = repository.getCoursesByTermID(termID);
+            allCourses.addAll(repository.getCoursesByTermID(termID));
         }
         courseAdapter.setCourses(allCourses);
         courseAdapter.notifyDataSetChanged();

@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import wgu.c192.wguschedulerkbaldr2.R;
+import wgu.c192.wguschedulerkbaldr2.entities.Course;
 
 public class CourseList extends AppCompatActivity {
 
@@ -29,7 +31,7 @@ public class CourseList extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(CourseList.this, CourseDetail.class);
-                intent.putExtra("MODE_KEY", 1); // or MODE_ADD
+                intent.putExtra(CourseDetail.MODE_KEY, CourseDetail.MODE_ADD);
                 startActivity(intent);
             }
         });

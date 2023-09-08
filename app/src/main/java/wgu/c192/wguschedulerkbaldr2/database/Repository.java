@@ -23,6 +23,8 @@ public class Repository {
     private Term mTerm;
     private List<Course> mAllCourses;
 
+    private Course mCourse;
+
     private AssessmentDAO mAssessmentDAO;
 
     private List<Assessment> mAllAssessments;
@@ -128,6 +130,18 @@ public class Repository {
             throw new RuntimeException(e);
         }
         return mAllCourses;
+    }
+
+    public Course getAssociatedCourse(int courseId) {
+        databaseExecutor.execute(() -> {
+            mCourse = mCourseDAO.getAssociatedCourse(courseId);
+        });
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return mCourse;
     }
 
     public List<Assessment> getAllAssessments() {

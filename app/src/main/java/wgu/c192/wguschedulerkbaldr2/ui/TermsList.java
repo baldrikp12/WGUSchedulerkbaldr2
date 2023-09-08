@@ -39,7 +39,6 @@ public class TermsList extends AppCompatActivity {
         termAdapter.setTerms(allTerms);
 
 
-
         // Set up FloatingActionButton to add a new term
         FloatingActionButton addTermBtn = findViewById(R.id.floatingActionButton);
         addTermBtn.setOnClickListener(new View.OnClickListener() {
@@ -65,7 +64,6 @@ public class TermsList extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         // Refresh the list of terms when the activity resumes
         List<Term> allTerms = repository.getAllTerms();
         termAdapter.setTerms(allTerms);

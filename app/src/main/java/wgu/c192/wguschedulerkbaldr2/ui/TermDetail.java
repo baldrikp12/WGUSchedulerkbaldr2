@@ -214,4 +214,11 @@ public class TermDetail extends AppCompatActivity {
         int mode = getIntent().getIntExtra(MODE_KEY, MODE_VIEW);
         return mode == MODE_ADD;
     }
+
+    public void cancel(View view){
+        // After adding the term, switch to viewing mode by starting a new instance of the activity
+        Intent viewIntent = new Intent(TermDetail.this, TermsList.class);
+        viewIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(viewIntent);
+    }
 }
