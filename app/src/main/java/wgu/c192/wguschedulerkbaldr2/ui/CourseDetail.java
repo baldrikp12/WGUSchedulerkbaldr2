@@ -190,8 +190,10 @@ public class CourseDetail extends AppCompatActivity {
         return mode == MODE_ADD;
     }
 
-    public void cancel(View view) {
+    public void cancel(View view){
+        // After adding the term, switch to viewing mode by starting a new instance of the activity
         Intent viewIntent = new Intent(CourseDetail.this, CourseList.class);
+        viewIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(viewIntent);
     }
 }
