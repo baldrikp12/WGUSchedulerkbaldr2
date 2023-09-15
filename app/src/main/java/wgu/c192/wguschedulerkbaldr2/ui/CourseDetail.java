@@ -8,9 +8,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
@@ -62,6 +64,7 @@ public class CourseDetail extends AppCompatActivity {
         }
 
         if (mode == MODE_VIEW && selectedCourse != null) {
+            buildActionBar();
             setViewMode(selectedCourse);
         } else if (mode == MODE_ADD) {
             setAddMode();
@@ -73,6 +76,12 @@ public class CourseDetail extends AppCompatActivity {
     }
 
     private void setViewMode(Course course) {
+        ActionBar actionBar = getSupportActionBar(); // Assuming you are using AppCompatActivity
+
+        if (actionBar != null) {
+            actionBar.setTitle(course.getCourseTitle()); // Set the new title here
+        }
+
         courseTitleEditText.setText(course.getCourseTitle());
         startDate.setText(course.getCourseStart());
         endDate.setText(course.getCourseEnd());
@@ -85,6 +94,17 @@ public class CourseDetail extends AppCompatActivity {
         courseTitleEditText.setFocusable(false);
         addCourseButton.setVisibility(View.INVISIBLE);
         cancelCourseButton.setVisibility(View.INVISIBLE);
+        Button showPopupButton = findViewById(R.id.show_popup_button);
+        showPopupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an instance of your popup fragment
+                MyPopupFragment popupFragment = new MyPopupFragment();
+
+                // Show the fragment as a dialog
+                popupFragment.show(getSupportFragmentManager(), "MyPopupFragment");
+            }
+        });
     }
 
     private void setAddMode() {
@@ -190,10 +210,39 @@ public class CourseDetail extends AppCompatActivity {
         return mode == MODE_ADD;
     }
 
-    public void cancel(View view){
+    public void cancel(View view) {
         // After adding the term, switch to viewing mode by starting a new instance of the activity
         Intent viewIntent = new Intent(CourseDetail.this, CourseList.class);
         viewIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(viewIntent);
     }
+
+    private void buildActionBar() {
+
+
+        // Customize the elements of the ActionBar
+        ImageView backButton = findViewById(R.id.back_button);
+        TextView titleView = findViewById(R.id.actionbar_title);
+        ImageView menuIcon = findViewById(R.id.menu_icon);
+
+        // Set click listeners for backButton and menuIcon here to handle actions
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+        menuIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle menu icon click
+                // You can show a popup menu with "Edit" and "Delete" options here
+            }
+        });
+
+        // Set the title dynamically
+        titleView.setText("Your Title");
+    }
 }
+

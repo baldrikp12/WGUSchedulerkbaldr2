@@ -7,6 +7,10 @@
     tools:context=".ui.CourseDetail"
     tools:layout_editor_absoluteY="81dp">
 
+    <include
+        android:id="@+id/include"
+        layout="@layout/custom_action_bar" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/course_text_input_layout"
         android:layout_width="match_parent"
@@ -15,7 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/include">
 
         <EditText
             android:id="@+id/courseTitleTextview"
@@ -132,5 +136,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+    <Button
+        android:id="@+id/show_popup_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="44dp"
+        android:layout_marginBottom="8dp"
+        android:text="Show Popup"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/addBtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
