@@ -1,13 +1,16 @@
 package wgu.c192.wguschedulerkbaldr2.ui;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,13 +21,16 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import wgu.c192.wguschedulerkbaldr2.R;
 import wgu.c192.wguschedulerkbaldr2.database.Repository;
 import wgu.c192.wguschedulerkbaldr2.entities.Course;
+import wgu.c192.wguschedulerkbaldr2.util.AlarmHelper;
 
 public class CourseDetail extends AppCompatActivity {
 
@@ -42,6 +48,9 @@ public class CourseDetail extends AppCompatActivity {
     private TextView endDate;
     private DatePickerDialog startDatePicker;
     private DatePickerDialog endDatePicker;
+
+    private ImageButton startDateAlert;
+    private TextView courseStartDateLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +74,7 @@ public class CourseDetail extends AppCompatActivity {
 
         if (mode == MODE_VIEW && selectedCourse != null) {
             buildActionBar();
+            builtAlertActions();
             setViewMode(selectedCourse);
         } else if (mode == MODE_ADD) {
             setAddMode();
@@ -74,6 +84,42 @@ public class CourseDetail extends AppCompatActivity {
 
         initDatePickers();
     }
+
+    private void builtAlertActions() {
+
+        startDateAlert = findViewById(R.id.startDateAlert);
+        courseStartDateLabel = findViewById(R.id.courseStartDateLabel);
+        startDateAlert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // Get the course start date from the TextView
+                String startDateStr = courseStartDateLabel.getText().toString();
+
+                try {
+                    // Parse the date string to a Date object
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                    Date startDate = dateFormat.parse(startDateStr);
+
+                    // Get the trigger time in milliseconds
+                    long triggerTimeMillis = startDate.getTime();
+
+                    // Store the trigger time in SharedPreferences
+                    SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putLong("courseStartDateAlarm", triggerTimeMillis);
+                    editor.apply();
+
+                    // Schedule the alarm
+                    AlarmHelper.scheduleAlarm(CourseDetail.this, triggerTimeMillis, 0);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
 
     private void setViewMode(Course course) {
         ActionBar actionBar = getSupportActionBar(); // Assuming you are using AppCompatActivity
@@ -88,9 +134,11 @@ public class CourseDetail extends AppCompatActivity {
         // Find the CourseListFragment and pass termID as an argument
         FragmentManager fragmentManager = getSupportFragmentManager();
         AssessmentListFragment fragment = (AssessmentListFragment) fragmentManager.findFragmentById(R.id.coursefragmentcontainter);
+        /*
         Bundle args = new Bundle();
         args.putInt("courseID", course.getCourseID());
         fragment.setArguments(args);
+       */
         courseTitleEditText.setFocusable(false);
         addCourseButton.setVisibility(View.INVISIBLE);
         cancelCourseButton.setVisibility(View.INVISIBLE);
@@ -223,7 +271,7 @@ public class CourseDetail extends AppCompatActivity {
         // Customize the elements of the ActionBar
         ImageView backButton = findViewById(R.id.back_button);
         TextView titleView = findViewById(R.id.actionbar_title);
-        ImageView menuIcon = findViewById(R.id.menu_icon);
+        ImageView menuIcon = findViewById(R.id.menu_button);
 
         // Set click listeners for backButton and menuIcon here to handle actions
         backButton.setOnClickListener(new View.OnClickListener() {
