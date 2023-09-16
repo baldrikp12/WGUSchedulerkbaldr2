@@ -19,7 +19,7 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:paddingStart="16dp"
-            android:src="?attr/homeAsUpIndicator" />
+            android:src="@drawable/iconmonstr_arrow_left_alt_filled" />
 
         <!-- Centered text -->
         <TextView
@@ -39,7 +39,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:paddingEnd="16dp"
-            android:src="@android:drawable/ic_menu_sort_by_size" />
+            android:src="@drawable/iconmonstr_menu_lined" />
 
     </RelativeLayout>
 
