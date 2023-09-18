@@ -139,20 +139,19 @@ public class CourseDetail extends AppCompatActivity {
     }
 
     private void handleDateAlertClick(TextView dateLabel, String startOrEnd, ImageButton button) {
-        // Create a unique key for this alarm entry
-        String alarmKeyEnabled = "Alarm_course_" + selectedCourse.getCourseID() + "_" + startOrEnd + "_enabled";
+
         String alarmKeyDate = "Alarm_course_" + selectedCourse.getCourseID() + "_" + startOrEnd + "_date";
         // Check if the alarm is already set for this date
-        boolean isAlarmOn = ReminderManager.isReminderSet(this, alarmKeyEnabled);
+        boolean isAlarmOn = ReminderManager.isReminderSet(this, alarmKeyDate);
 
         if (isAlarmOn) {
             // Cancel the alarm
-            ReminderManager.cancelReminder(this, alarmKeyEnabled, alarmKeyDate);
+            ReminderManager.cancelReminder(this, alarmKeyDate);
             button.setImageResource(R.drawable.iconmonstr_bell_12);
         } else {
             // Set the alarm
             String dateStr = dateLabel.getText().toString();
-            ReminderManager.setReminder(this, alarmKeyEnabled, alarmKeyDate, dateStr);
+            ReminderManager.setReminder(this, alarmKeyDate, dateStr);
             button.setImageResource(R.drawable.iconmonstr_bell_8);
         }
     }
@@ -273,6 +272,7 @@ public class CourseDetail extends AppCompatActivity {
             toast.show();
         }
     }
+
     // Method to load saved notes from SharedPreferences
     private void loadNotes() {
         SharedPreferences sharedPreferences = getSharedPreferences("NOTES", MODE_PRIVATE);
@@ -301,6 +301,7 @@ public class CourseDetail extends AppCompatActivity {
     public void onSaveNotesClick(View view) {
         saveNotes();
     }
+
     public void onStartDateLabelClick(View view) {
         if (isEditMode() || isAddMode()) {
             startDatePicker.show();
@@ -370,6 +371,7 @@ public class CourseDetail extends AppCompatActivity {
         // Set the title dynamically
         titleView.setText("Your Title");
     }
+
     private void shareCourse() {
         String courseTitle = courseTitleEditText.getText().toString();
         String courseStart = startDate.getText().toString();

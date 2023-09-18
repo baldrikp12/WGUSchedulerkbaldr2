@@ -318,36 +318,34 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="10dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/textView14"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Name:"
                     android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/textView17"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:text="Phone:"
-                    android:textSize="20sp" />
+                    android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/textView18"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:text="E-Mail:"
-                    android:textSize="20sp" />
+                    android:textSize="24sp" />
 
             </LinearLayout>
 
@@ -367,8 +365,7 @@
                     android:minWidth="100dp"
                     android:selectAllOnFocus="true"
                     android:singleLine="true"
-                    android:text="John Doe"
-                    android:textSize="20sp" />
+                    android:textSize="24sp" />
 
                 <View
                     android:id="@+id/view2"
@@ -381,13 +378,13 @@
                     android:id="@+id/MentorPhoneField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@null"
+                    android:background="#FFFFFF"
                     android:cursorVisible="true"
                     android:inputType="phone"
                     android:minWidth="100dp"
                     android:selectAllOnFocus="true"
                     android:singleLine="true"
-                    android:textSize="20sp" />
+                    android:textSize="24sp" />
 
                 <View
                     android:id="@+id/view3"
@@ -400,13 +397,13 @@
                     android:id="@+id/mentorEMailField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@null"
+                    android:background="#FFFFFF"
                     android:cursorVisible="true"
                     android:inputType="text|textEmailAddress"
                     android:minWidth="100dp"
                     android:selectAllOnFocus="true"
                     android:singleLine="true"
-                    android:textSize="20sp" />
+                    android:textSize="24sp" />
 
                 <View
                     android:id="@+id/view4"

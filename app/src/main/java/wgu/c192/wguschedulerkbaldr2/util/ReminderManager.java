@@ -18,12 +18,14 @@ import java.util.Map;
 public class ReminderManager {
     private static final String PREF_NAME = "MyReminders";
 
-    public static void setReminder(Context context, String alarmKeyEnabled, String alarmKeyDate, String dateString) {
+    public static void setReminder(Context context, String alarmKeyDate, String dateString) {
         // Parse the date string into milliseconds
         long alarmTimeMillis = parseDateStringToMillis(dateString);
 
         if (alarmTimeMillis == -1) {
-            return; // Invalid date string, do not set the alarm
+            // Handle invalid date string
+            showShortToast(context, "Invalid date format");
+            return;
         }
 
         // Create an Intent for the BroadcastReceiver
@@ -38,18 +40,14 @@ public class ReminderManager {
         // Set the alarm to trigger at the specified time
         alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTimeMillis, pendingIntent);
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(alarmKeyEnabled, true);
-        editor.putLong(alarmKeyDate, alarmTimeMillis);
-        editor.apply();
+        // Store reminder in shared preferences
+        updateSharedPrefs(context, alarmKeyDate, alarmTimeMillis);
 
-        Toast toast =Toast.makeText(context, "Reminder Set", Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.TOP, 0, 0);
-        toast.show();
+        // Show a toast message indicating the reminder was set
+        showShortToast(context, "Reminder Set");
     }
 
-    public static void cancelReminder(Context context, String alarmKeyEnabled, String alarmKeyDate) {
+    public static void cancelReminder(Context context, String alarmKeyDate) {
         // Create an Intent for the BroadcastReceiver
         Intent intent = new Intent(context, ReminderReceiver.class);
 
@@ -60,26 +58,17 @@ public class ReminderManager {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
 
-        // Use shared preferences to mark the reminder as canceled
-        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+        // Remove reminder from shared preferences
+        removeFromSharedPrefs(context, alarmKeyDate);
 
-        // Remove an entry by its key
-        editor.remove(alarmKeyEnabled);
-        editor.remove(alarmKeyDate);
-
-        // Apply the changes
-        editor.apply();
-
-        Toast toast =Toast.makeText(context, "Reminder Canceled", Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.TOP, 0, 0);
-        toast.show();
+        // Show a toast message indicating the reminder was canceled
+        showShortToast(context, "Reminder Canceled");
     }
 
     public static boolean isReminderSet(Context context, String alarmKey) {
         // Use shared preferences to check if the reminder is set
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getBoolean(alarmKey, false);
+        return sharedPreferences.contains(alarmKey);
     }
 
     public static void registerAllAlarms(Context context) {
@@ -89,12 +78,11 @@ public class ReminderManager {
         Map<String, ?> allEntries = sharedPreferences.getAll();
         for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
             if (entry.getKey().startsWith("Alarm_course_") && entry.getValue() instanceof Long) {
-                String alarmKeyEnabled = entry.getKey() + "_enabled";
                 String alarmKeyDate = entry.getKey() + "_date";
                 long alarmTimeMillis = (long) entry.getValue();
 
                 // Check if the alarm is enabled
-                boolean isAlarmEnabled = sharedPreferences.getBoolean(alarmKeyEnabled, false);
+                boolean isAlarmEnabled = isReminderSet(context, alarmKeyDate);
 
                 if (isAlarmEnabled) {
                     // Create an Intent for the BroadcastReceiver
@@ -115,7 +103,6 @@ public class ReminderManager {
         }
     }
 
-
     private static long parseDateStringToMillis(String dateString) {
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
         try {
@@ -127,5 +114,25 @@ public class ReminderManager {
             e.printStackTrace();
             return -1;
         }
+    }
+
+    private static void showShortToast(Context context, String message) {
+        Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.TOP, 0, 0);
+        toast.show();
+    }
+
+    private static void updateSharedPrefs(Context context, String alarmKeyDate, long alarmTimeMillis) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(alarmKeyDate, alarmTimeMillis);
+        editor.apply();
+    }
+
+    private static void removeFromSharedPrefs(Context context, String alarmKeyDate) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(alarmKeyDate);
+        editor.apply();
     }
 }
