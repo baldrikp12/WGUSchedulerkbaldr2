@@ -1,7 +1,6 @@
 package wgu.c192.wguschedulerkbaldr2.ui;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,24 +20,24 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import wgu.c192.wguschedulerkbaldr2.R;
 import wgu.c192.wguschedulerkbaldr2.database.Repository;
 import wgu.c192.wguschedulerkbaldr2.entities.Course;
-import wgu.c192.wguschedulerkbaldr2.util.AlarmHelper;
+import wgu.c192.wguschedulerkbaldr2.util.ReminderManager;
 
 public class CourseDetail extends AppCompatActivity {
 
+    // Constants for modes
     public static final String MODE_KEY = "mode";
     public static final int MODE_VIEW = 0;
     public static final int MODE_ADD = 1;
     public static final int MODE_EDIT = 2;
 
+    // UI elements
     private Course selectedCourse = null;
     private TextInputLayout course_text_input_layout;
     private EditText courseTitleEditText;
@@ -48,9 +47,10 @@ public class CourseDetail extends AppCompatActivity {
     private TextView endDate;
     private DatePickerDialog startDatePicker;
     private DatePickerDialog endDatePicker;
-
     private ImageButton startDateAlert;
-    private TextView courseStartDateLabel;
+    private ImageButton endDateAlert;
+    private EditText notesField;
+    private ImageButton saveNotesButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +60,7 @@ public class CourseDetail extends AppCompatActivity {
         int courseId = getIntent().getIntExtra("COURSE_ID", -1);
         int mode = getIntent().getIntExtra(MODE_KEY, MODE_VIEW);
 
-        course_text_input_layout = findViewById(R.id.course_text_input_layout);
-        courseTitleEditText = findViewById(R.id.courseTitleTextview);
-        addCourseButton = findViewById(R.id.addBtn);
-        cancelCourseButton = findViewById(R.id.cancelBtn);
-        startDate = findViewById(R.id.courseStartDateLabel);
-        endDate = findViewById(R.id.courseEndDateLabel);
+        initializeUIElements();
 
         if (courseId != -1) {
             Repository repository = new Repository(getApplication());
@@ -74,8 +69,9 @@ public class CourseDetail extends AppCompatActivity {
 
         if (mode == MODE_VIEW && selectedCourse != null) {
             buildActionBar();
-            builtAlertActions();
+            buildAlertActions();
             setViewMode(selectedCourse);
+            setBellIcons();
         } else if (mode == MODE_ADD) {
             setAddMode();
         } else {
@@ -85,39 +81,80 @@ public class CourseDetail extends AppCompatActivity {
         initDatePickers();
     }
 
-    private void builtAlertActions() {
-
+    /**
+     * Initialize UI elements and set click listeners.
+     */
+    private void initializeUIElements() {
+        course_text_input_layout = findViewById(R.id.course_text_input_layout);
+        courseTitleEditText = findViewById(R.id.courseTitleTextview);
+        addCourseButton = findViewById(R.id.addBtn);
+        cancelCourseButton = findViewById(R.id.cancelBtn);
+        startDate = findViewById(R.id.courseStartDateLabel);
+        endDate = findViewById(R.id.courseEndDateLabel);
         startDateAlert = findViewById(R.id.startDateAlert);
-        courseStartDateLabel = findViewById(R.id.courseStartDateLabel);
+        endDateAlert = findViewById(R.id.endDateAlert);
+        notesField = findViewById(R.id.notesField);
+        saveNotesButton = findViewById(R.id.saveNotesButton);
+    }
+
+    /**
+     * Check and set the bell icons based on the alarms' status.
+     */
+    private void setBellIcons() {
+        setBellIcon(startDateAlert, "Start");
+        setBellIcon(endDateAlert, "End");
+    }
+
+    /**
+     * Set the bell icon based on the alarm's status.
+     */
+    private void setBellIcon(ImageButton button, String startOrEnd) {
+        String alarmKeyEnabled = "Alarm_course_" + selectedCourse.getCourseID() + "_" + startOrEnd + "_enabled";
+        boolean isAlarmOn = ReminderManager.isReminderSet(this, alarmKeyEnabled);
+
+        if (isAlarmOn) {
+            button.setImageResource(R.drawable.iconmonstr_bell_8);
+        } else {
+            button.setImageResource(R.drawable.iconmonstr_bell_12);
+        }
+    }
+
+
+    private void buildAlertActions() {
+        // Set the click listener for the start date bell icon
         startDateAlert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                // Get the course start date from the TextView
-                String startDateStr = courseStartDateLabel.getText().toString();
-
-                try {
-                    // Parse the date string to a Date object
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                    Date startDate = dateFormat.parse(startDateStr);
-
-                    // Get the trigger time in milliseconds
-                    long triggerTimeMillis = startDate.getTime();
-
-                    // Store the trigger time in SharedPreferences
-                    SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putLong("courseStartDateAlarm", triggerTimeMillis);
-                    editor.apply();
-
-                    // Schedule the alarm
-                    AlarmHelper.scheduleAlarm(CourseDetail.this, triggerTimeMillis, 0);
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                handleDateAlertClick(startDate, "Start", startDateAlert);
             }
         });
+
+        // Set the click listener for the end date bell icon
+        endDateAlert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleDateAlertClick(endDate, "End", endDateAlert);
+            }
+        });
+    }
+
+    private void handleDateAlertClick(TextView dateLabel, String startOrEnd, ImageButton button) {
+        // Create a unique key for this alarm entry
+        String alarmKeyEnabled = "Alarm_course_" + selectedCourse.getCourseID() + "_" + startOrEnd + "_enabled";
+        String alarmKeyDate = "Alarm_course_" + selectedCourse.getCourseID() + "_" + startOrEnd + "_date";
+        // Check if the alarm is already set for this date
+        boolean isAlarmOn = ReminderManager.isReminderSet(this, alarmKeyEnabled);
+
+        if (isAlarmOn) {
+            // Cancel the alarm
+            ReminderManager.cancelReminder(this, alarmKeyEnabled, alarmKeyDate);
+            button.setImageResource(R.drawable.iconmonstr_bell_12);
+        } else {
+            // Set the alarm
+            String dateStr = dateLabel.getText().toString();
+            ReminderManager.setReminder(this, alarmKeyEnabled, alarmKeyDate, dateStr);
+            button.setImageResource(R.drawable.iconmonstr_bell_8);
+        }
     }
 
 
@@ -151,6 +188,21 @@ public class CourseDetail extends AppCompatActivity {
 
                 // Show the fragment as a dialog
                 popupFragment.show(getSupportFragmentManager(), "MyPopupFragment");
+            }
+        });
+        ImageButton shareNotesButton = findViewById(R.id.shareNotesButton);
+        shareNotesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareCourse();
+            }
+        });
+        loadNotes();
+        ImageButton saveNotes = findViewById(R.id.saveNotesButton);
+        saveNotes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveNotes();
             }
         });
     }
@@ -221,7 +273,34 @@ public class CourseDetail extends AppCompatActivity {
             toast.show();
         }
     }
+    // Method to load saved notes from SharedPreferences
+    private void loadNotes() {
+        SharedPreferences sharedPreferences = getSharedPreferences("NOTES", MODE_PRIVATE);
+        String savedNotes = sharedPreferences.getString(String.valueOf(selectedCourse.getCourseID()), "");
 
+        // Display the saved notes in the EditText
+        notesField.setText(savedNotes);
+    }
+
+    // Method to save notes to SharedPreferences
+    private void saveNotes() {
+        String notes = notesField.getText().toString();
+
+        SharedPreferences sharedPreferences = getSharedPreferences("NOTES", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        // Save the notes with the course ID as the key
+        editor.putString(String.valueOf(selectedCourse.getCourseID()), notes);
+        editor.apply();
+
+        // Provide feedback to the user
+        Toast.makeText(this, "Notes saved", Toast.LENGTH_SHORT).show();
+    }
+
+    // onClick listener for the saveNotesButton
+    public void onSaveNotesClick(View view) {
+        saveNotes();
+    }
     public void onStartDateLabelClick(View view) {
         if (isEditMode() || isAddMode()) {
             startDatePicker.show();
@@ -265,15 +344,15 @@ public class CourseDetail extends AppCompatActivity {
         startActivity(viewIntent);
     }
 
+    /**
+     * Build and customize the ActionBar.
+     */
     private void buildActionBar() {
-
-
         // Customize the elements of the ActionBar
         ImageView backButton = findViewById(R.id.back_button);
         TextView titleView = findViewById(R.id.actionbar_title);
         ImageView menuIcon = findViewById(R.id.menu_button);
 
-        // Set click listeners for backButton and menuIcon here to handle actions
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -284,13 +363,30 @@ public class CourseDetail extends AppCompatActivity {
         menuIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle menu icon click
-                // You can show a popup menu with "Edit" and "Delete" options here
+                // Handle menu icon click (e.g., show a popup menu with options)
             }
         });
 
         // Set the title dynamically
         titleView.setText("Your Title");
     }
+    private void shareCourse() {
+        String courseTitle = courseTitleEditText.getText().toString();
+        String courseStart = startDate.getText().toString();
+        String courseEnd = endDate.getText().toString();
+
+        String courseDetails = "Course Title: " + courseTitle + "\n" +
+                "Start Date: " + courseStart + "\n" +
+                "End Date: " + courseEnd;
+
+        // Create an Intent to send text
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, courseDetails);
+
+        // Start an activity to show a list of available sharing apps
+        startActivity(Intent.createChooser(shareIntent, "Share Course Details"));
+    }
+
 }
 
