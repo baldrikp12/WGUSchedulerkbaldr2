@@ -6,27 +6,34 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.Guideline;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import wgu.c192.wguschedulerkbaldr2.R;
 import wgu.c192.wguschedulerkbaldr2.database.Repository;
 import wgu.c192.wguschedulerkbaldr2.entities.Course;
+import wgu.c192.wguschedulerkbaldr2.entities.Term;
 import wgu.c192.wguschedulerkbaldr2.util.ReminderManager;
 
 public class CourseDetail extends AppCompatActivity {
@@ -51,6 +58,10 @@ public class CourseDetail extends AppCompatActivity {
     private ImageButton endDateAlert;
     private EditText notesField;
     private ImageButton saveNotesButton;
+
+    private Guideline topGuideline;
+
+    private Repository repository = new Repository(getApplication());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +106,17 @@ public class CourseDetail extends AppCompatActivity {
         endDateAlert = findViewById(R.id.endDateAlert);
         notesField = findViewById(R.id.notesField);
         saveNotesButton = findViewById(R.id.saveNotesButton);
+        topGuideline = findViewById(R.id.top_guideline);
+
+        List<Term> termList = repository.getAllTerms();
+        Term defaultTerm = new Term();
+        defaultTerm.setTermTitle("Select a term");
+        termList.add(0, defaultTerm);
+        ArrayList<Term> termArrayList = new ArrayList<>(termList);
+        ArrayAdapter<Term> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, termArrayList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner spinner = findViewById(R.id.term_spinner);
+        spinner.setAdapter(adapter);
     }
 
     /**
@@ -207,6 +229,16 @@ public class CourseDetail extends AppCompatActivity {
     }
 
     private void setAddMode() {
+
+        // Get references to the views
+        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) topGuideline.getLayoutParams();
+        TextInputLayout courseTextInputLayout = findViewById(R.id.course_text_input_layout);
+        // If in edit or add mode, shift the guideline down by 100dp and make the TextInputLayout visible
+        params.guidePercent = 0.20f;
+        courseTextInputLayout.setVisibility(View.VISIBLE);
+        // Apply the new layout parameters to the guideline
+        topGuideline.setLayoutParams(params);
+
         courseTitleEditText.setFocusable(true);
         startDate.setFocusable(true);
         endDate.setFocusable(true);
@@ -247,8 +279,6 @@ public class CourseDetail extends AppCompatActivity {
             String newStartDate = startDate.getText().toString();
             String newEndDate = endDate.getText().toString();
 
-
-            Repository repository = new Repository(getApplication());
 
             if (isAddMode()) {
                 Course course = new Course(newTitle, newStartDate, newEndDate);
@@ -330,11 +360,18 @@ public class CourseDetail extends AppCompatActivity {
         args.putInt("courseID", course.getCourseID());
         fragment.setArguments(args);
 
+
         setAddMode();
+    }
+
+    private int dpToPx(int dp) {
+        float density = getResources().getDisplayMetrics().density;
+        return Math.round((float) dp * density);
     }
 
     private boolean isAddMode() {
         int mode = getIntent().getIntExtra(MODE_KEY, MODE_VIEW);
+
         return mode == MODE_ADD;
     }
 
