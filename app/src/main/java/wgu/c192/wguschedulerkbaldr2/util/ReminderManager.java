@@ -68,6 +68,7 @@ public class ReminderManager {
     public static boolean isReminderSet(Context context, String alarmKey) {
         // Use shared preferences to check if the reminder is set
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        System.out.println(alarmKey);
         return sharedPreferences.contains(alarmKey);
     }
 

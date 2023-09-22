@@ -1,11 +1,14 @@
 package wgu.c192.wguschedulerkbaldr2.ui;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -18,9 +21,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.Guideline;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -38,13 +38,12 @@ import wgu.c192.wguschedulerkbaldr2.util.ReminderManager;
 
 public class CourseDetail extends AppCompatActivity {
 
-    // Constants for modes
     public static final String MODE_KEY = "mode";
     public static final int MODE_VIEW = 0;
     public static final int MODE_ADD = 1;
     public static final int MODE_EDIT = 2;
+    private static final String[] courseStatusArray = {"COURSE STATUS", "in progress", "completed", "dropped", "plan to take"};
 
-    // UI elements
     private Course selectedCourse = null;
     private TextInputLayout course_text_input_layout;
     private EditText courseTitleEditText;
@@ -58,23 +57,30 @@ public class CourseDetail extends AppCompatActivity {
     private ImageButton endDateAlert;
     private EditText notesField;
     private ImageButton saveNotesButton;
+    private EditText mentorName;
+    private EditText mentorNumber;
+    private EditText mentorEmail;
 
-    private Guideline topGuideline;
-
-    private Repository repository = new Repository(getApplication());
+    private Repository repository;
+    private Spinner termSpinner;
+    private Spinner statusSpinner;
+    private boolean userIsInteracting = false;
+    private boolean isFirstTermSpinnerInteraction = true;
+    private boolean isFirstStatusSpinnerInteraction = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_detail);
 
-        int courseId = getIntent().getIntExtra("COURSE_ID", -1);
-        int mode = getIntent().getIntExtra(MODE_KEY, MODE_VIEW);
+        repository = new Repository(getApplication());
 
         initializeUIElements();
 
+        int courseId = getIntent().getIntExtra("COURSE_ID", -1);
+        int mode = getIntent().getIntExtra(MODE_KEY, MODE_VIEW);
+
         if (courseId != -1) {
-            Repository repository = new Repository(getApplication());
             selectedCourse = repository.getAssociatedCourse(courseId);
         }
 
@@ -83,13 +89,15 @@ public class CourseDetail extends AppCompatActivity {
             buildAlertActions();
             setViewMode(selectedCourse);
             setBellIcons();
+
         } else if (mode == MODE_ADD) {
             setAddMode();
         } else {
             setEditMode(selectedCourse);
-        }
 
+        }
         initDatePickers();
+
     }
 
     /**
@@ -98,6 +106,7 @@ public class CourseDetail extends AppCompatActivity {
     private void initializeUIElements() {
         course_text_input_layout = findViewById(R.id.course_text_input_layout);
         courseTitleEditText = findViewById(R.id.courseTitleTextview);
+        course_text_input_layout = findViewById(R.id.course_text_input_layout);
         addCourseButton = findViewById(R.id.addBtn);
         cancelCourseButton = findViewById(R.id.cancelBtn);
         startDate = findViewById(R.id.courseStartDateLabel);
@@ -106,17 +115,85 @@ public class CourseDetail extends AppCompatActivity {
         endDateAlert = findViewById(R.id.endDateAlert);
         notesField = findViewById(R.id.notesField);
         saveNotesButton = findViewById(R.id.saveNotesButton);
-        topGuideline = findViewById(R.id.top_guideline);
-
+        termSpinner = findViewById(R.id.term_spinner);
+        statusSpinner = findViewById(R.id.status_spinner);
+        mentorName = findViewById(R.id.mentorNameField);
+        mentorNumber = findViewById(R.id.mentorPhoneField);
+        mentorEmail = findViewById(R.id.mentorEMailField);
+        // Initialize the Spinner
         List<Term> termList = repository.getAllTerms();
         Term defaultTerm = new Term();
-        defaultTerm.setTermTitle("Select a term");
+        defaultTerm.setTermTitle("SELECT A TERM");
         termList.add(0, defaultTerm);
         ArrayList<Term> termArrayList = new ArrayList<>(termList);
-        ArrayAdapter<Term> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, termArrayList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Spinner spinner = findViewById(R.id.term_spinner);
-        spinner.setAdapter(adapter);
+        ArrayAdapter<Term> termAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, termArrayList);
+        termAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        termSpinner.setAdapter(termAdapter);
+
+        ArrayAdapter<String> statusAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, courseStatusArray);
+        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        statusSpinner.setAdapter(statusAdapter);
+
+
+
+    }
+
+    private void setTermSpinnerListener() {
+        termSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+
+                    new AlertDialog.Builder(CourseDetail.this)
+                            .setTitle("Save Changes")
+                            .setMessage("Do you want to save the changes?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Save the selected term
+                                    Term selectedTerm = (Term) termSpinner.getSelectedItem();
+                                    selectedCourse.setTermID_F(selectedTerm.getTermID());
+                                    repository.update(selectedCourse);
+                                    userIsInteracting = true;
+                                }
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+    }
+
+    private void setStatusSpinnerListener() {
+
+        statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                    new AlertDialog.Builder(CourseDetail.this)
+                            .setTitle("Save Changes")
+                            .setMessage("Do you want to save the changes?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Save the selected status
+                                    String status = statusSpinner.getSelectedItem().toString();
+                                    saveStatus(status);
+                                    userIsInteracting = true;
+                                }
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
     }
 
     /**
@@ -131,7 +208,7 @@ public class CourseDetail extends AppCompatActivity {
      * Set the bell icon based on the alarm's status.
      */
     private void setBellIcon(ImageButton button, String startOrEnd) {
-        String alarmKeyEnabled = "Alarm_course_" + selectedCourse.getCourseID() + "_" + startOrEnd + "_enabled";
+        String alarmKeyEnabled = "Alarm_course_" + selectedCourse.getCourseID() + "_" + startOrEnd + "_date";
         boolean isAlarmOn = ReminderManager.isReminderSet(this, alarmKeyEnabled);
 
         if (isAlarmOn) {
@@ -180,71 +257,58 @@ public class CourseDetail extends AppCompatActivity {
 
 
     private void setViewMode(Course course) {
-        ActionBar actionBar = getSupportActionBar(); // Assuming you are using AppCompatActivity
-
+        ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setTitle(course.getCourseTitle()); // Set the new title here
+            actionBar.setTitle(course.getCourseTitle());
         }
-
+        course_text_input_layout.setVisibility(View.GONE);
         courseTitleEditText.setText(course.getCourseTitle());
         startDate.setText(course.getCourseStart());
         endDate.setText(course.getCourseEnd());
-        // Find the CourseListFragment and pass termID as an argument
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        AssessmentListFragment fragment = (AssessmentListFragment) fragmentManager.findFragmentById(R.id.coursefragmentcontainter);
-        /*
-        Bundle args = new Bundle();
-        args.putInt("courseID", course.getCourseID());
-        fragment.setArguments(args);
-       */
-        courseTitleEditText.setFocusable(false);
-        addCourseButton.setVisibility(View.INVISIBLE);
-        cancelCourseButton.setVisibility(View.INVISIBLE);
-        Button showPopupButton = findViewById(R.id.show_popup_button);
-        showPopupButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Create an instance of your popup fragment
-                MyPopupFragment popupFragment = new MyPopupFragment();
 
-                // Show the fragment as a dialog
-                popupFragment.show(getSupportFragmentManager(), "MyPopupFragment");
-            }
-        });
-        ImageButton shareNotesButton = findViewById(R.id.shareNotesButton);
-        shareNotesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                shareCourse();
-            }
-        });
+        // Find the index of the selected term in the term list
+        int selectedTermIndex = findTermIndex(course.getTermID_F());
+        if (selectedTermIndex != -1) {
+            termSpinner.setSelection(selectedTermIndex);
+        }
+
+        String status = loadStatus();
+        int statusIndex = findStatusIndex(status);
+        if (statusIndex != -1) {
+            statusSpinner.setSelection(statusIndex);
+        }
+
+
+        startDate.setEnabled(false); // Disable editability
+        endDate.setEnabled(false); // Disable editability
+
+        addCourseButton.setVisibility(View.GONE);
+        cancelCourseButton.setVisibility(View.GONE);
+
+        saveNotesButton.setOnClickListener(v -> saveNotes());
         loadNotes();
-        ImageButton saveNotes = findViewById(R.id.saveNotesButton);
-        saveNotes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveNotes();
-            }
-        });
+
+        ImageButton shareNotesButton = findViewById(R.id.shareNotesButton);
+        shareNotesButton.setOnClickListener(v -> shareNotes());
+        setTermSpinnerListener();
+        setStatusSpinnerListener();
     }
 
+
     private void setAddMode() {
-
-        // Get references to the views
-        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) topGuideline.getLayoutParams();
-        TextInputLayout courseTextInputLayout = findViewById(R.id.course_text_input_layout);
-        // If in edit or add mode, shift the guideline down by 100dp and make the TextInputLayout visible
-        params.guidePercent = 0.20f;
-        courseTextInputLayout.setVisibility(View.VISIBLE);
-        // Apply the new layout parameters to the guideline
-        topGuideline.setLayoutParams(params);
-
-        courseTitleEditText.setFocusable(true);
-        startDate.setFocusable(true);
-        endDate.setFocusable(true);
+        course_text_input_layout.setVisibility(View.VISIBLE);
+        courseTitleEditText.setEnabled(true); // Enable editability
+        startDate.setEnabled(true); // Enable editability
+        endDate.setEnabled(true); // Enable editability
 
         addCourseButton.setVisibility(View.VISIBLE);
         cancelCourseButton.setVisibility(View.VISIBLE);
+
+        saveNotesButton.setOnClickListener(null); // Remove click listener for saveNotesButton
+
+        // Hide shareNotesButton in add mode
+        ImageButton shareNotesButton = findViewById(R.id.shareNotesButton);
+        shareNotesButton.setVisibility(View.INVISIBLE);
     }
 
     private void initDatePickers() {
@@ -278,10 +342,14 @@ public class CourseDetail extends AppCompatActivity {
             String newTitle = courseTitleEditText.getText().toString().trim();
             String newStartDate = startDate.getText().toString();
             String newEndDate = endDate.getText().toString();
-
-
+            Integer termID = termSpinner.getSelectedItem() != null ? ((Term) termSpinner.getSelectedItem()).getTermID() : null;
+            String mentName = mentorName.getText().toString();
+            String mentNumber = mentorNumber.getText().toString();
+            String mentEmail = mentorEmail.getText().toString();
+            String status = statusSpinner.getSelectedItem().toString();
+            saveStatus(status);
             if (isAddMode()) {
-                Course course = new Course(newTitle, newStartDate, newEndDate);
+                Course course = new Course(newTitle, newStartDate, newEndDate, termID, mentName, mentNumber, mentEmail);
                 repository.insert(course);
             }
             if (isEditMode()) {
@@ -312,6 +380,11 @@ public class CourseDetail extends AppCompatActivity {
         notesField.setText(savedNotes);
     }
 
+    private String loadStatus() {
+        SharedPreferences sharedPreferences = getSharedPreferences("COURSE_PREFS", MODE_PRIVATE);
+        return sharedPreferences.getString("status", "COURSE STATUS"); // Default value is "COURSE STATUS"
+    }
+
     // Method to save notes to SharedPreferences
     private void saveNotes() {
         String notes = notesField.getText().toString();
@@ -325,11 +398,6 @@ public class CourseDetail extends AppCompatActivity {
 
         // Provide feedback to the user
         Toast.makeText(this, "Notes saved", Toast.LENGTH_SHORT).show();
-    }
-
-    // onClick listener for the saveNotesButton
-    public void onSaveNotesClick(View view) {
-        saveNotes();
     }
 
     public void onStartDateLabelClick(View view) {
@@ -354,20 +422,46 @@ public class CourseDetail extends AppCompatActivity {
         startDate.setText(course.getCourseStart());
         endDate.setText(course.getCourseEnd());
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        CourseListFragment fragment = (CourseListFragment) fragmentManager.findFragmentById(R.id.coursefragmentcontainter);
-        Bundle args = new Bundle();
-        args.putInt("courseID", course.getCourseID());
-        fragment.setArguments(args);
+        // Find the index of the selected term in the term list
+        int selectedTermIndex = findTermIndex(course.getTermID_f());
+        if (selectedTermIndex != -1) {
+            termSpinner.setSelection(selectedTermIndex);
+        }
 
-
+        String status = loadStatus();
+        int statusIndex = findStatusIndex(status);
+        if (statusIndex != -1) {
+            statusSpinner.setSelection(statusIndex);
+        }
         setAddMode();
     }
 
-    private int dpToPx(int dp) {
-        float density = getResources().getDisplayMetrics().density;
-        return Math.round((float) dp * density);
+    private void saveStatus(String status) {
+        SharedPreferences sharedPreferences = getSharedPreferences("COURSE_PREFS", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("status", status);
+        editor.apply();
     }
+
+    private int findTermIndex(int termID) {
+        ArrayAdapter<Term> termAdapter = (ArrayAdapter<Term>) termSpinner.getAdapter();
+        for (int i = 0; i < termAdapter.getCount(); i++) {
+            if (termAdapter.getItem(i).getTermID() == termID) {
+                return i;
+            }
+        }
+        return -1; // Term not found
+    }
+
+    private int findStatusIndex(String status) {
+        for (int i = 0; i < courseStatusArray.length; i++) {
+            if (courseStatusArray[i].equals(status)) {
+                return i;
+            }
+        }
+        return -1; // Status not found
+    }
+
 
     private boolean isAddMode() {
         int mode = getIntent().getIntExtra(MODE_KEY, MODE_VIEW);
@@ -409,22 +503,16 @@ public class CourseDetail extends AppCompatActivity {
         titleView.setText("Your Title");
     }
 
-    private void shareCourse() {
-        String courseTitle = courseTitleEditText.getText().toString();
-        String courseStart = startDate.getText().toString();
-        String courseEnd = endDate.getText().toString();
-
-        String courseDetails = "Course Title: " + courseTitle + "\n" +
-                "Start Date: " + courseStart + "\n" +
-                "End Date: " + courseEnd;
+    private void shareNotes() {
+        String notes = notesField.getText().toString();
 
         // Create an Intent to send text
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, courseDetails);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, notes);
 
         // Start an activity to show a list of available sharing apps
-        startActivity(Intent.createChooser(shareIntent, "Share Course Details"));
+        startActivity(Intent.createChooser(shareIntent, "Share Notes"));
     }
 
 }

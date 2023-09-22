@@ -15,7 +15,7 @@ import wgu.c192.wguschedulerkbaldr2.entities.Course;
 import wgu.c192.wguschedulerkbaldr2.entities.Term;
 import wgu.c192.wguschedulerkbaldr2.util.Converters;
 
-@Database(entities = {Term.class, Course.class, Assessment.class}, version = 1, exportSchema = false)
+@Database(entities = {Term.class, Course.class, Assessment.class}, version = 2, exportSchema = false)
 //@TypeConverters({Converters.class})
 public abstract class SchedulerDatabaseBuilder extends RoomDatabase {
     //public abstract AssessmentDAO assessmentDAO();

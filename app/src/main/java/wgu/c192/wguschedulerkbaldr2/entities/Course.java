@@ -14,15 +14,19 @@ public class Course {
     private String courseTitle;
     private String courseStart;
     private String courseEnd;
-    private String instName;
-    private String instNumber;
-    private String instEmail;
+    private String mentName;
+    private String mentNumber;
+    private String mentEmail;
     private int termID_f; //Foreign Key
 
-    public Course(String courseTitle, String startDate, String endDate) {
+    public Course(String courseTitle, String startDate, String endDate, int termID, String mentName, String mentNumber, String mentEmail) {
         this.courseTitle = courseTitle;
         this.courseStart = startDate;
         this.courseEnd = endDate;
+        this.termID_f = termID;
+        this.mentName = mentName;
+        this.mentNumber = mentNumber;
+        this.mentEmail = mentEmail;
     }
 
     public Course() {
@@ -45,28 +49,28 @@ public class Course {
         this.courseEnd = courseEnd;
     }
 
-    public String getInstName() {
-        return instName;
+    public String getMentName() {
+        return mentName;
     }
 
-    public void setInstName(String instName) {
-        this.instName = instName;
+    public void setMentName(String mentName) {
+        this.mentName = mentName;
     }
 
-    public String getInstNumber() {
-        return instNumber;
+    public String getMentNumber() {
+        return mentNumber;
     }
 
-    public void setInstNumber(String instNumber) {
-        this.instNumber = instNumber;
+    public void setMentNumber(String mentNumber) {
+        this.mentNumber = mentNumber;
     }
 
-    public String getInstEmail() {
-        return instEmail;
+    public String getMentEmail() {
+        return mentEmail;
     }
 
-    public void setInstEmail(String instEmail) {
-        this.instEmail = instEmail;
+    public void setMentEmail(String mentEmail) {
+        this.mentEmail = mentEmail;
     }
 
     public int getTermID_f() {

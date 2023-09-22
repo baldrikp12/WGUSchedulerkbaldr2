@@ -26,6 +26,7 @@
             android:name=".ui.TermDetail"
             android:exported="false"
             android:label="@string/title_activity_term_detail"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.WGUSchedulerkbaldr2" />
         <activity
             android:name=".ui.TermsList"
@@ -41,6 +42,7 @@
             android:name=".ui.CourseDetail"
             android:exported="false"
             android:label="Course Details"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.WGUSchedulerkbaldr2" />
         <activity
             android:name=".ui.CourseList"
@@ -61,6 +63,7 @@
             android:name=".ui.AssessmentDetail"
             android:exported="false"
             android:label="Assessment Details"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.WGUSchedulerkbaldr2" />
         <activity
             android:name=".ui.MainActivity"
