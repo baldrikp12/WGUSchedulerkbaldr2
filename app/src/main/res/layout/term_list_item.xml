@@ -52,8 +52,8 @@
 
         <!-- First CardView (stacked on top of the second one) -->
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardView1"
-            android:layout_width="229dp"
+            android:id="@+id/topTermCardView"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             app:cardBackgroundColor="#AEE47F"
@@ -77,11 +77,12 @@
                     <TextView
                         android:id="@+id/termNameLabel"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="10dp"
                         android:layout_weight="1"
                         android:text="Title"
                         android:textColor="@android:color/black"
-                        android:textSize="18sp" />
+                        android:textSize="20sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -101,7 +102,8 @@
                         android:layout_weight="1"
                         android:gravity="end"
                         android:text="Start: "
-                        android:textColor="@android:color/black" />
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp" />
 
                     <TextView
                         android:id="@+id/textViewDescription"
@@ -111,13 +113,14 @@
                         android:gravity="end"
                         android:text="End: "
                         android:textColor="@android:color/black"
-                        android:textSize="14sp" />
+                        android:textSize="20sp" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -127,7 +130,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="01/02/2023"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp" />
 
                     <TextView
                         android:id="@+id/endDateLabel"
@@ -135,7 +139,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="02/03/2023"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp" />
                 </LinearLayout>
             </LinearLayout>
 

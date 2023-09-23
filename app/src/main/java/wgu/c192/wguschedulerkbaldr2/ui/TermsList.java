@@ -17,28 +17,28 @@ import wgu.c192.wguschedulerkbaldr2.database.Repository;
 import wgu.c192.wguschedulerkbaldr2.entities.Term;
 
 public class TermsList extends AppCompatActivity {
-
+    
     private Repository repository;
     private TermAdapter termAdapter;
-
-
+    private RecyclerView recyclerView;
+    
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_terms_list);
-
+        
         // Initialize RecyclerView and its adapter
-        RecyclerView recyclerView = findViewById(R.id.termrecyclerview);
+        recyclerView = findViewById(R.id.termrecyclerview);
         termAdapter = new TermAdapter(this);
         recyclerView.setAdapter(termAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        
         // Initialize Repository and fetch all terms
         repository = new Repository(getApplication());
         List<Term> allTerms = repository.getAllTerms();
         termAdapter.setTerms(allTerms);
-
-
+        
         // Set up FloatingActionButton to add a new term
         FloatingActionButton addTermBtn = findViewById(R.id.floatingActionButton);
         addTermBtn.setOnClickListener(new View.OnClickListener() {
@@ -50,7 +50,7 @@ public class TermsList extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+        
         // Set up FloatingActionButton to go back
         FloatingActionButton backFAB = findViewById(R.id.backFAB);
         backFAB.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +60,8 @@ public class TermsList extends AppCompatActivity {
             }
         });
     }
-
+    
+    
     @Override
     protected void onResume() {
         super.onResume();

@@ -14,7 +14,7 @@ import wgu.c192.wguschedulerkbaldr2.entities.Course;
 import wgu.c192.wguschedulerkbaldr2.entities.Term;
 
 public class Repository {
-
+    
     private static final int NUMBER_OF_THREADS = 4;
     static final ExecutorService databaseExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
     private final TermDAO mTermDAO;
@@ -22,20 +22,20 @@ public class Repository {
     private List<Term> mAllTerms;
     private Term mTerm;
     private List<Course> mAllCourses;
-
+    
     private Course mCourse;
-
+    
     private AssessmentDAO mAssessmentDAO;
-
+    
     private List<Assessment> mAllAssessments;
-
+    
     public Repository(Application application) {
         SchedulerDatabaseBuilder db = SchedulerDatabaseBuilder.getDatabase(application);
         mTermDAO = db.termDAO();
         mCourseDAO = db.courseDAO();
         mAssessmentDAO = db.assessmentDAO();
     }
-
+    
     public List<Term> getAllTerms() {
         databaseExecutor.execute(() -> {
             mAllTerms = mTermDAO.getAllTerms();
@@ -47,7 +47,7 @@ public class Repository {
         }
         return mAllTerms;
     }
-
+    
     public void insert(Term term) {
         databaseExecutor.execute(() -> {
             mTermDAO.insert(term);
@@ -57,9 +57,9 @@ public class Repository {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
+        
     }
-
+    
     public void update(Term term) {
         databaseExecutor.execute(() -> {
             mTermDAO.update(term);
@@ -69,9 +69,9 @@ public class Repository {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
+        
     }
-
+    
     public Term getAssociatedTerm(int termId) {
         databaseExecutor.execute(() -> {
             mTerm = mTermDAO.getAssociatedTerm(termId);
@@ -83,9 +83,10 @@ public class Repository {
         }
         return mTerm;
     }
-
-
+    
+    
     public List<Course> getAllCourses() {
+        System.out.println("getting all courses");
         databaseExecutor.execute(() -> {
             mAllCourses = mCourseDAO.getAllCourses();
         });
@@ -96,7 +97,7 @@ public class Repository {
         }
         return mAllCourses;
     }
-
+    
     public void insert(Course course) {
         databaseExecutor.execute(() -> {
             mCourseDAO.insert(course);
@@ -106,9 +107,9 @@ public class Repository {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
+        
     }
-
+    
     public void update(Course course) {
         databaseExecutor.execute(() -> {
             mCourseDAO.update(course);
@@ -119,7 +120,18 @@ public class Repository {
             throw new RuntimeException(e);
         }
     }
-
+    
+    public void delete(Course course) {
+        databaseExecutor.execute(() -> {
+            mCourseDAO.delete(course);
+        });
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
     public List<Course> getCoursesByTermID(int termID) {
         databaseExecutor.execute(() -> {
             mAllCourses = mCourseDAO.getCoursesByTermID(termID);
@@ -131,7 +143,7 @@ public class Repository {
         }
         return mAllCourses;
     }
-
+    
     public Course getAssociatedCourse(int courseId) {
         databaseExecutor.execute(() -> {
             mCourse = mCourseDAO.getAssociatedCourse(courseId);
@@ -143,7 +155,7 @@ public class Repository {
         }
         return mCourse;
     }
-
+    
     public List<Assessment> getAllAssessments() {
         databaseExecutor.execute(() -> {
             mAllAssessments = mAssessmentDAO.getAllAssessments();
@@ -155,7 +167,7 @@ public class Repository {
         }
         return mAllAssessments;
     }
-
+    
     public void insert(Assessment assessment) {
         databaseExecutor.execute(() -> {
             mAssessmentDAO.insert(assessment);
@@ -165,9 +177,9 @@ public class Repository {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
+        
     }
-
+    
     public void update(Assessment assessment) {
         databaseExecutor.execute(() -> {
             mAssessmentDAO.update(assessment);
@@ -177,7 +189,31 @@ public class Repository {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
+        
     }
-
+    
+    public void delete(Assessment assessment) {
+        databaseExecutor.execute(() -> {
+            mAssessmentDAO.delete(assessment);
+        });
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        
+    }
+    
+    public List<Assessment> getAssessmentsByCourseID(int courseID) {
+        databaseExecutor.execute(() -> {
+            mAllAssessments = mAssessmentDAO.getAssessmentsByCourseID(courseID);
+        });
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return mAllAssessments;
+    }
+    
 }

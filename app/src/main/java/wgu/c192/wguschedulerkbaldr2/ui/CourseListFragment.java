@@ -39,14 +39,14 @@ public class CourseListFragment extends Fragment {
 
         Bundle arguments = this.getArguments();
 
-        int termID = 0;
+        Integer termID = null;
         if (arguments != null) {
             termID = arguments.getInt("termID");
 
         }
         List<Course> allCourses = new ArrayList<>();
 
-        if (termID == 0) {
+        if (termID == null) {
             allCourses.addAll(repository.getAllCourses());
         } else {
             allCourses.addAll(repository.getCoursesByTermID(termID));

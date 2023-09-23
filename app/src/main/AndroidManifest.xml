@@ -42,7 +42,6 @@
             android:name=".ui.CourseDetail"
             android:exported="false"
             android:label="Course Details"
-            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.WGUSchedulerkbaldr2" />
         <activity
             android:name=".ui.CourseList"

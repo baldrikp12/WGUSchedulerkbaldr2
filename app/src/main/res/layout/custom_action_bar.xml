@@ -1,20 +1,17 @@
 <!-- custom_action_bar.xml -->
 <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/custom_toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:background="?attr/colorPrimary"
+    android:gravity="top"
     app:contentInsetStart="0dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <!-- Back icon on the far left -->
-
-        <!-- Centered text -->
+        android:layout_height="match_parent"
+        android:gravity="top">
 
         <ImageButton
             android:id="@+id/back_button"
@@ -32,9 +29,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:gravity="top"
             android:text="Your Title"
             android:textColor="#ffffff"
-            android:textSize="24sp" />
+            android:textSize="34sp" />
 
         <ImageButton
             android:id="@+id/menu_button"
@@ -47,7 +45,6 @@
             android:backgroundTint="#00FFFFFF"
             app:srcCompat="@drawable/iconmonstr_menu_lined" />
 
-        <!-- Menu icon on the far right -->
 
     </RelativeLayout>
 

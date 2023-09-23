@@ -28,4 +28,7 @@ public interface AssessmentDAO {
 
     @Query("SELECT * FROM Assessment WHERE assessmentID = :assessmentID ORDER BY assessmentID ASC")
     List<Assessment> getAllAssociatedAssessments(int assessmentID);
+    
+    @Query("SELECT * FROM ASSESSMENT WHERE courseID_F = :courseID")
+    List<Assessment> getAssessmentsByCourseID (int courseID);
 }
