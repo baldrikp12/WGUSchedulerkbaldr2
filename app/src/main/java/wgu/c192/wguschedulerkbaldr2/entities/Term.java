@@ -1,28 +1,20 @@
 package wgu.c192.wguschedulerkbaldr2.entities;
 
 import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "term")
+@Entity(tableName = "TERM")
 public class Term {
     
     @PrimaryKey(autoGenerate = true)
     @NonNull
-    @ColumnInfo(name = "TermID")
     private int termID;
-    
     @NonNull
-    @ColumnInfo(name = "TermTitle")
     private String termTitle;
-    
     @NonNull
-    @ColumnInfo(name = "StartDate")
     private String startDate;
-    
     @NonNull
-    @ColumnInfo(name = "EndDate")
     private String endDate;
     
     
@@ -33,7 +25,11 @@ public class Term {
     }
     
     public Term() {
-    
+        
+        setTermTitle("SELECT A TERM");
+        setTermID(0);
+        setStartDate("");
+        setEndDate("");
     }
     
     public int getTermID() {

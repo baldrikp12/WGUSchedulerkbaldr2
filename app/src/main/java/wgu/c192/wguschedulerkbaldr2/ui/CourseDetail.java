@@ -37,6 +37,7 @@ import wgu.c192.wguschedulerkbaldr2.entities.Assessment;
 import wgu.c192.wguschedulerkbaldr2.entities.Course;
 import wgu.c192.wguschedulerkbaldr2.entities.Term;
 import wgu.c192.wguschedulerkbaldr2.util.ReminderManager;
+
 @SuppressWarnings("unchecked")
 public class CourseDetail extends AppCompatActivity {
     
@@ -63,7 +64,7 @@ public class CourseDetail extends AppCompatActivity {
     private EditText mentorNumber;
     private EditText mentorEmail;
     
-    private Repository repository;
+    private Repository repository = new Repository(getApplication());
     private Spinner termSpinner;
     private Spinner statusSpinner;
     private boolean userIsInteracting = false;
@@ -76,12 +77,10 @@ public class CourseDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_detail);
         
-        repository = new Repository(getApplication());
-        
-        initializeUIElements();
-        
         int courseId = getIntent().getIntExtra("COURSE_ID", -1);
         mode = getIntent().getIntExtra(MODE_KEY, MODE_VIEW);
+        
+        initializeUIElements();
         
         if (courseId != -1) {
             selectedCourse = repository.getAssociatedCourse(courseId);
@@ -116,11 +115,9 @@ public class CourseDetail extends AppCompatActivity {
         termSpinner = findViewById(R.id.term_spinner);
         statusSpinner = findViewById(R.id.status_spinner);
         mentorName = findViewById(R.id.mentorNameField);
-        mentorName.setEnabled(false);
         mentorNumber = findViewById(R.id.mentorPhoneField);
-        mentorNumber.setEnabled(false);
         mentorEmail = findViewById(R.id.mentorEMailField);
-        mentorEmail.setEnabled(false);
+        
         // Initialize the Spinner
         List<Term> termList = repository.getAllTerms();
         Term defaultTerm = new Term();
@@ -135,6 +132,105 @@ public class CourseDetail extends AppCompatActivity {
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         statusSpinner.setAdapter(statusAdapter);
         
+    }
+    
+    private void setViewMode(Course course) {
+        buildActionBar();
+        buildAlertActions();
+        // Find the index of the selected term in the term list
+        int selectedTermIndex = findTermIndex(course.getTermID_F());
+        if (selectedTermIndex != -1) {
+            termSpinner.setSelection(selectedTermIndex);
+            previousTermSpinnerSelection = termSpinner.getSelectedItemPosition();
+        }
+        
+        String status = loadStatus();
+        int statusIndex = findStatusIndex(status);
+        if (statusIndex != -1) {
+            statusSpinner.setSelection(statusIndex);
+            previousStatusSpinnerSelection = statusSpinner.getSelectedItemPosition();
+        }
+        
+        course_text_input_layout.setVisibility(View.GONE);
+        courseTitleEditText.setText(course.getCourseTitle());
+        startDate.setText(course.getCourseStart());
+        endDate.setText(course.getCourseEnd());
+        mentorName.setText(selectedCourse.getMentName());
+        mentorNumber.setText(selectedCourse.getMentNumber());
+        mentorEmail.setText(selectedCourse.getMentEmail());
+        mentorName.setEnabled(false);
+        mentorNumber.setEnabled(false);
+        mentorEmail.setEnabled(false);
+        startDate.setEnabled(false);
+        endDate.setEnabled(false);
+        
+        addEditCourseButton.setVisibility(View.GONE);
+        cancelCourseButton.setVisibility(View.GONE);
+        
+        saveNotesButton.setOnClickListener(v -> saveNotes());
+        loadNotes();
+        
+        ImageButton shareNotesButton = findViewById(R.id.shareNotesButton);
+        shareNotesButton.setOnClickListener(v -> shareNotes());
+        shareNotesButton.setVisibility(View.VISIBLE);
+        setTermSpinnerListener();
+        setStatusSpinnerListener();
+        setBellIcons();
+    }
+    
+    private void setEditMode(Course course) {
+        buildActionBar();
+        courseTitleEditText.setText(course.getCourseTitle());
+        startDate.setText(course.getCourseStart());
+        endDate.setText(course.getCourseEnd());
+        
+        // Find the index of the selected term in the term list
+        int selectedTermIndex = findTermIndex(course.getTermID_f());
+        if (selectedTermIndex != -1) {
+            termSpinner.setSelection(selectedTermIndex);
+        }
+        
+        String status = loadStatus();
+        int statusIndex = findStatusIndex(status);
+        if (statusIndex != -1) {
+            statusSpinner.setSelection(statusIndex);
+        }
+        course_text_input_layout.setVisibility(View.VISIBLE);
+        courseTitleEditText.setEnabled(true);
+        startDate.setEnabled(true);
+        endDate.setEnabled(true);
+        mentorName.setEnabled(true);
+        mentorNumber.setEnabled(true);
+        mentorEmail.setEnabled(true);
+        addEditCourseButton.setText("Update");
+        addEditCourseButton.setVisibility(View.VISIBLE);
+        buildCancelButton();
+        saveNotesButton.setOnClickListener(null); // Remove click listener for saveNotesButton
+        
+        // Hide shareNotesButton in edit  mode
+        ImageButton shareNotesButton = findViewById(R.id.shareNotesButton);
+        shareNotesButton.setVisibility(View.INVISIBLE);
+    }
+    
+    private void setAddMode() {
+        buildActionBar();
+        course_text_input_layout.setVisibility(View.VISIBLE);
+        courseTitleEditText.setEnabled(true); // Enable editability
+        startDate.setEnabled(true); // Enable editability
+        endDate.setEnabled(true); // Enable editability
+        mentorName.setEnabled(true);
+        mentorNumber.setEnabled(true);
+        mentorEmail.setEnabled(true);
+        addEditCourseButton.setText("Add");
+        addEditCourseButton.setVisibility(View.VISIBLE);
+        buildCancelButton();
+        
+        
+        saveNotesButton.setOnClickListener(null); // Remove click listener for saveNotesButton
+        
+        // Hide shareNotesButton in add mode
+        ImageButton shareNotesButton = findViewById(R.id.shareNotesButton);
+        shareNotesButton.setVisibility(View.INVISIBLE);
     }
     
     @Override
@@ -155,6 +251,7 @@ public class CourseDetail extends AppCompatActivity {
                             Term selectedTerm = (Term) termSpinner.getSelectedItem();
                             selectedCourse.setTermID_F(selectedTerm.getTermID());
                             repository.update(selectedCourse);
+                            
                         }
                     }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
@@ -261,72 +358,6 @@ public class CourseDetail extends AppCompatActivity {
         }
     }
     
-    
-    private void setViewMode(Course course) {
-        buildActionBar();
-        buildAlertActions();
-        // Find the index of the selected term in the term list
-        int selectedTermIndex = findTermIndex(course.getTermID_F());
-        if (selectedTermIndex != -1) {
-            termSpinner.setSelection(selectedTermIndex);
-            previousTermSpinnerSelection = termSpinner.getSelectedItemPosition();
-        }
-        
-        String status = loadStatus();
-        int statusIndex = findStatusIndex(status);
-        if (statusIndex != -1) {
-            statusSpinner.setSelection(statusIndex);
-            previousStatusSpinnerSelection = statusSpinner.getSelectedItemPosition();
-        }
-        
-        course_text_input_layout.setVisibility(View.GONE);
-        courseTitleEditText.setText(course.getCourseTitle());
-        startDate.setText(course.getCourseStart());
-        endDate.setText(course.getCourseEnd());
-        mentorName.setText(selectedCourse.getMentName());
-        mentorNumber.setText(selectedCourse.getMentNumber());
-        mentorEmail.setText(selectedCourse.getMentEmail());
-        
-        startDate.setEnabled(false); // Disable editability
-        endDate.setEnabled(false); // Disable editability
-        
-        addEditCourseButton.setVisibility(View.GONE);
-        cancelCourseButton.setVisibility(View.GONE);
-        
-        
-        saveNotesButton.setOnClickListener(v -> saveNotes());
-        loadNotes();
-        
-        ImageButton shareNotesButton = findViewById(R.id.shareNotesButton);
-        shareNotesButton.setOnClickListener(v -> shareNotes());
-        shareNotesButton.setVisibility(View.VISIBLE);
-        setTermSpinnerListener();
-        setStatusSpinnerListener();
-        setBellIcons();
-    }
-    
-    
-    private void setAddMode() {
-        buildActionBar();
-        course_text_input_layout.setVisibility(View.VISIBLE);
-        courseTitleEditText.setEnabled(true); // Enable editability
-        startDate.setEnabled(true); // Enable editability
-        endDate.setEnabled(true); // Enable editability
-        mentorName.setEnabled(true);
-        mentorNumber.setEnabled(true);
-        mentorEmail.setEnabled(true);
-        addEditCourseButton.setText("Add");
-        addEditCourseButton.setVisibility(View.VISIBLE);
-        buildCancelButton();
-        
-        
-        saveNotesButton.setOnClickListener(null); // Remove click listener for saveNotesButton
-        
-        // Hide shareNotesButton in add mode
-        ImageButton shareNotesButton = findViewById(R.id.shareNotesButton);
-        shareNotesButton.setVisibility(View.INVISIBLE);
-    }
-    
     private void buildCancelButton() {
         cancelCourseButton.setVisibility(View.VISIBLE);
         cancelCourseButton.setOnClickListener(new View.OnClickListener() {
@@ -372,19 +403,18 @@ public class CourseDetail extends AppCompatActivity {
         if (!courseTitleEditText.getText().toString().trim().isEmpty()) {
             
             String newTitle = courseTitleEditText.getText().toString().trim();
-            String newStartDate = startDate.getText().toString().isEmpty() ? null : startDate.getText().toString().trim();
-            String newEndDate = endDate.getText().toString().isEmpty() ? null : endDate.getText().toString().trim();
+            String newStartDate = startDate.getText().toString().isEmpty() ? "" : startDate.getText().toString().trim();
+            String newEndDate = endDate.getText().toString().isEmpty() ? "" : endDate.getText().toString().trim();
             int termID = termSpinner.getSelectedItem() != null ? ((Term) termSpinner.getSelectedItem()).getTermID() : 0;
-            System.out.println("+++++++++++++++++++++++++++++++++++++++++++   " + termID);
-            String mentName = mentorName.getText().toString().isEmpty() ? null : mentorName.getText().toString().trim();
-            String mentNumber = mentorNumber.getText().toString().isEmpty() ? null : mentorNumber.getText().toString().trim();
-            String mentEmail = mentorEmail.getText().toString().isEmpty() ? null : mentorEmail.getText().toString().trim();
+            String mentName = mentorName.getText().toString().isEmpty() ? "" : mentorName.getText().toString().trim();
+            String mentNumber = mentorNumber.getText().toString().isEmpty() ? "" : mentorNumber.getText().toString().trim();
+            String mentEmail = mentorEmail.getText().toString().isEmpty() ? "" : mentorEmail.getText().toString().trim();
             
             String status = statusSpinner.getSelectedItem().toString();
             saveStatus(status);
             
             if (isAddMode()) {
-                Course course = new Course(newTitle, newStartDate, newEndDate, mentName, mentNumber, mentEmail);
+                Course course = new Course(newTitle, newStartDate, newEndDate, mentName, mentNumber, mentEmail, termID);
                 repository.insert(course);
             }
             if (isEditMode()) {
@@ -405,11 +435,11 @@ public class CourseDetail extends AppCompatActivity {
             
             finish();
         } else {
-            toastAlert("Title cannot be blank");
+            showToast("Title cannot be blank");
         }
     }
     
-    private void toastAlert(String theMessage) {
+    private void showToast(String theMessage) {
         Toast toast = Toast.makeText(this, theMessage, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.TOP, 0, 0);
         toast.show();
@@ -441,7 +471,7 @@ public class CourseDetail extends AppCompatActivity {
         editor.apply();
         
         // Provide feedback to the user
-        toastAlert("Notes saved");
+        showToast("Notes saved");
     }
     
     public void onStartDateLabelClick(View view) {
@@ -461,41 +491,6 @@ public class CourseDetail extends AppCompatActivity {
         return mode == MODE_EDIT;
     }
     
-    private void setEditMode(Course course) {
-        System.out.println("                        seteditmode 1 " + isEditMode());
-        buildActionBar();
-        courseTitleEditText.setText(course.getCourseTitle());
-        startDate.setText(course.getCourseStart());
-        endDate.setText(course.getCourseEnd());
-        
-        // Find the index of the selected term in the term list
-        int selectedTermIndex = findTermIndex(course.getTermID_f());
-        if (selectedTermIndex != -1) {
-            termSpinner.setSelection(selectedTermIndex);
-        }
-        
-        String status = loadStatus();
-        int statusIndex = findStatusIndex(status);
-        if (statusIndex != -1) {
-            statusSpinner.setSelection(statusIndex);
-        }
-        course_text_input_layout.setVisibility(View.VISIBLE);
-        courseTitleEditText.setEnabled(true);
-        startDate.setEnabled(true);
-        endDate.setEnabled(true);
-        mentorName.setEnabled(true);
-        mentorNumber.setEnabled(true);
-        mentorEmail.setEnabled(true);
-        addEditCourseButton.setText("Update");
-        addEditCourseButton.setVisibility(View.VISIBLE);
-        buildCancelButton();
-        System.out.println("                        seteditmode 2 " + isEditMode());
-        saveNotesButton.setOnClickListener(null); // Remove click listener for saveNotesButton
-        
-        // Hide shareNotesButton in edit  mode
-        ImageButton shareNotesButton = findViewById(R.id.shareNotesButton);
-        shareNotesButton.setVisibility(View.INVISIBLE);
-    }
     
     private void saveStatus(String status) {
         SharedPreferences sharedPreferences = getSharedPreferences("COURSE_PREFS", MODE_PRIVATE);
@@ -530,12 +525,6 @@ public class CourseDetail extends AppCompatActivity {
         return mode == MODE_ADD;
     }
     
-    public void cancel(View view) {
-        // After adding the term, switch to viewing mode by starting a new instance of the activity
-        Intent viewIntent = new Intent(CourseDetail.this, CourseList.class);
-        viewIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(viewIntent);
-    }
     
     /**
      * Build and customize the ActionBar.
@@ -577,6 +566,7 @@ public class CourseDetail extends AppCompatActivity {
                                 deleteCourse(selectedCourse);
                                 Intent intent = new Intent(CourseDetail.this, CourseList.class);
                                 startActivity(intent);
+                                showToast("Course has been deleted.");
                             }
                         } else if (isAddMode()) { // Cancel
                             onBackPressed();
@@ -609,17 +599,10 @@ public class CourseDetail extends AppCompatActivity {
     // Show an alert for existing assessments
     private void showAlertForExistingAssessments() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("This course has existing assessments. Delete anyway?")
-                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+        builder.setMessage("This course has existing assessments. Please remove assessments first.")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // User confirmed to delete the course with assessments
-                        deleteCourse(selectedCourse);
-                        toastAlert("Notes Saved");
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User canceled the deletion
+                        // User acknowledged the alert, simply close the dialog
                         dialog.dismiss();
                     }
                 });

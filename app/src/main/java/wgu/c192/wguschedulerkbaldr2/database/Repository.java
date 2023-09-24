@@ -72,6 +72,17 @@ public class Repository {
         
     }
     
+    public void delete(Term term) {
+        databaseExecutor.execute(() -> {
+            mTermDAO.delete(term);
+        });
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
     public Term getAssociatedTerm(int termId) {
         databaseExecutor.execute(() -> {
             mTerm = mTermDAO.getAssociatedTerm(termId);
@@ -214,6 +225,11 @@ public class Repository {
             throw new RuntimeException(e);
         }
         return mAllAssessments;
+    }
+    
+    @Override
+    public String toString() {
+        return "I AM NOT NULL"; // assuming 'title' is the name of your term's title variable
     }
     
 }

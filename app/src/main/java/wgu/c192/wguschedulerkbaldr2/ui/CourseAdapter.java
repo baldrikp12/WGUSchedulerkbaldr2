@@ -49,7 +49,6 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     @Override
     public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
         if (mCourses != null) {
-            System.out.println("not null");
             Course currentCourse = mCourses.get(position);
             String name = currentCourse.getCourseTitle();
             holder.courseNameView.setText(name);

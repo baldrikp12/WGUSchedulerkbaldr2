@@ -2,54 +2,32 @@ package wgu.c192.wguschedulerkbaldr2.entities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(
-        tableName = "COURSE",
-        foreignKeys = {
-                @ForeignKey(
-                        entity = Term.class,
-                        parentColumns = "TermID",
-                        childColumns = "CourseID",
-                        onDelete = ForeignKey.CASCADE,
-                        deferred = true)})
+@Entity(tableName = "COURSE")
 public class Course {
     
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "CourseID")
     @NonNull
-    private int courseID = 0;
-    
-    @ColumnInfo(name = "CourseTitle")
+    private int courseID;
     @NonNull
-    private String courseTitle = "";
-    
-    @ColumnInfo(name = "CourseStart")
+    private String courseTitle;
     @Nullable
     private String courseStart;
-    
-    @ColumnInfo(name = "CourseEnd")
     @Nullable
     private String courseEnd;
-    
-    @ColumnInfo(name = "MentName")
     @Nullable
     private String mentName;
-    
-    @ColumnInfo(name = "MentNumber")
     @Nullable
     private String mentNumber;
-    
-    @ColumnInfo(name = "MentEmail")
     @Nullable
     private String mentEmail;
+
+    @Nullable
+    private Integer termID_f;
     
-    private int termID_f; // Foreign key
-    
-    public Course(String courseTitle, String startDate, String endDate, int termID, String mentName, String mentNumber, String mentEmail) {
+    public Course(String courseTitle, String startDate, String endDate, String mentName, String mentNumber, String mentEmail, Integer termID) {
         this.courseTitle = courseTitle;
         this.courseStart = startDate;
         this.courseEnd = endDate;

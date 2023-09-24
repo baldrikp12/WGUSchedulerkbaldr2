@@ -23,7 +23,7 @@ public interface CourseDAO {
     @Delete
     void delete(Course course);
 
-    @Query("SELECT * FROM COURSE ORDER BY CourseID ASC")
+    @Query("SELECT * FROM COURSE ORDER BY courseID ASC")
     List<Course> getAllCourses();
 
     @Query("SELECT * FROM COURSE WHERE courseID = :courseID")

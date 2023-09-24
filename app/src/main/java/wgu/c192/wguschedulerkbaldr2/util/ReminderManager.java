@@ -78,7 +78,7 @@ public class ReminderManager {
         // Iterate through your shared preferences and re-register alarms
         Map<String, ?> allEntries = sharedPreferences.getAll();
         for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            if (entry.getKey().startsWith("Alarm_course_") && entry.getValue() instanceof Long) {
+            if (entry.getKey().startsWith("Alarm_") && entry.getValue() instanceof Long) {
                 String alarmKeyDate = entry.getKey() + "_date";
                 long alarmTimeMillis = (long) entry.getValue();
 
