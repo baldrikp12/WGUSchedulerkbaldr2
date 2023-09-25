@@ -24,7 +24,7 @@ public class AssessmentListFragment extends Fragment {
     private List<Assessment> allAssessments = new ArrayList<>();
     
     public AssessmentListFragment() {
-        // Required empty public constructor
+
     }
     
     @Override

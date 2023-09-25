@@ -95,12 +95,9 @@ public class AssessmentDetail extends AppCompatActivity {
         termAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         courseSpinner.setAdapter(termAdapter);
     }
-    
-    /**
-     * Build and customize the ActionBar.
-     */
+
     private void buildActionBar() {
-        // Customize the elements of the ActionBar
+        
         ImageView backButton = findViewById(R.id.back_button);
         TextView titleView = findViewById(R.id.actionbar_title);
         ImageView menuIcon = findViewById(R.id.menu_button);
@@ -151,7 +148,7 @@ public class AssessmentDetail extends AppCompatActivity {
         if (isAddMode()) {
             titleView.setText("New Assessment");
         } else {
-            // Set the title dynamically
+            
             titleView.setText(selectedAssessment.getAssessmentTitle());
         }
     }
@@ -180,7 +177,6 @@ public class AssessmentDetail extends AppCompatActivity {
         assessmentTitleEditText.setText(assessment.getAssessmentTitle());
         buildAlertActions();
         
-        // Find the index of the selected term in the term list
         int selectedCourseIndex = findCourseIndex(assessment.getCourseID_f());
         if (selectedCourseIndex != -1) {
             courseSpinner.setSelection(selectedCourseIndex);
@@ -251,7 +247,7 @@ public class AssessmentDetail extends AppCompatActivity {
     }
     
     private void buildAlertActions() {
-        // Set the click listener for the start date bell icon
+        
         startDateAlert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -259,7 +255,7 @@ public class AssessmentDetail extends AppCompatActivity {
             }
         });
         
-        // Set the click listener for the end date bell icon
+        
         endDateAlert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -271,15 +267,15 @@ public class AssessmentDetail extends AppCompatActivity {
     private void handleDateAlertClick(TextView dateLabel, String startOrEnd, ImageButton button) {
         
         String alarmKeyDate = "Alarm_assessment_" + selectedAssessment.getAssessmentID() + "_" + startOrEnd + "_date";
-        // Check if the alarm is already set for this date
+  
         boolean isAlarmOn = ReminderManager.isReminderSet(this, alarmKeyDate);
         
         if (isAlarmOn) {
-            // Cancel the alarm
+   
             ReminderManager.cancelReminder(this, alarmKeyDate);
             button.setImageResource(R.drawable.iconmonstr_bell_12);
         } else {
-            // Set the alarm
+      
             String dateStr = dateLabel.getText().toString();
             ReminderManager.setReminder(this, alarmKeyDate, dateStr);
             button.setImageResource(R.drawable.iconmonstr_bell_8);
@@ -391,7 +387,7 @@ public class AssessmentDetail extends AppCompatActivity {
                 return i;
             }
         }
-        return -1; // Term not found
+        return -1;
     }
     
     private void setCourseSpinnerListener() {
@@ -402,7 +398,7 @@ public class AssessmentDetail extends AppCompatActivity {
                 if (userIsInteracting) {
                     new AlertDialog.Builder(AssessmentDetail.this).setTitle("Save Changes").setMessage("Do you want to save the changes?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            // Save the selected term
+                    
                             Course selectedCourse = (Course) courseSpinner.getSelectedItem();
                             selectedAssessment.setCourseID_f(selectedCourse.getCourseID());
                             repository.update(selectedAssessment);

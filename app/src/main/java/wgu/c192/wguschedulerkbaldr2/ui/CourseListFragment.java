@@ -24,7 +24,6 @@ public class CourseListFragment extends Fragment {
     private List<Course> allCourses = new ArrayList<>();
     
     public CourseListFragment() {
-        // Required empty public constructor
     }
     
     @Override

@@ -240,7 +240,7 @@ public class Repository {
     }
     @Override
     public String toString() {
-        return "I AM NOT NULL"; // assuming 'title' is the name of your term's title variable
+        return "I AM NOT NULL";
     }
     
 }

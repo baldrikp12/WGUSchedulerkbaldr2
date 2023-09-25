@@ -96,10 +96,7 @@ public class CourseDetail extends AppCompatActivity {
         initDatePickers();
         
     }
-    
-    /**
-     * Initialize UI elements and set click listeners.
-     */
+ 
     private void initializeUIElements() {
         this.course_text_input_layout = findViewById(R.id.course_text_input_layout);
         this.courseTitleEditText = findViewById(R.id.courseTitleTextview);
@@ -118,8 +115,7 @@ public class CourseDetail extends AppCompatActivity {
         this.mentorName = findViewById(R.id.mentorNameField);
         this.mentorNumber = findViewById(R.id.mentorPhoneField);
         this.mentorEmail = findViewById(R.id.mentorEMailField);
-        
-        // Initialize the Spinner
+     
         List<Term> termList = repository.getAllTerms();
         Term defaultTerm = new Term();
         defaultTerm.setTermTitle("SELECT A TERM");
@@ -138,7 +134,7 @@ public class CourseDetail extends AppCompatActivity {
     private void setViewMode(Course course) {
         buildActionBar();
         buildAlertActions();
-        // Find the index of the selected term in the term list
+     
         int selectedTermIndex = findTermIndex(course.getTermID_F());
         if (selectedTermIndex != -1) {
             termSpinner.setSelection(selectedTermIndex);
@@ -187,7 +183,6 @@ public class CourseDetail extends AppCompatActivity {
         startDate.setText(course.getCourseStart());
         endDate.setText(course.getCourseEnd());
         
-        // Find the index of the selected term in the term list
         int selectedTermIndex = findTermIndex(course.getTermID_f());
         if (selectedTermIndex != -1) {
             termSpinner.setSelection(selectedTermIndex);
@@ -208,9 +203,8 @@ public class CourseDetail extends AppCompatActivity {
         addEditCourseButton.setText("Update");
         addEditCourseButton.setVisibility(View.VISIBLE);
         buildCancelButton();
-        saveNotesButton.setOnClickListener(null); // Remove click listener for saveNotesButton
+        saveNotesButton.setOnClickListener(null);
         
-        // Hide shareNotesButton in edit  mode
         ImageButton shareNotesButton = findViewById(R.id.shareNotesButton);
         shareNotesButton.setVisibility(View.INVISIBLE);
     }
@@ -218,9 +212,9 @@ public class CourseDetail extends AppCompatActivity {
     private void setAddMode() {
         buildActionBar();
         course_text_input_layout.setVisibility(View.VISIBLE);
-        courseTitleEditText.setEnabled(true); // Enable editability
-        startDate.setEnabled(true); // Enable editability
-        endDate.setEnabled(true); // Enable editability
+        courseTitleEditText.setEnabled(true);
+        startDate.setEnabled(true);
+        endDate.setEnabled(true);
         mentorName.setEnabled(true);
         mentorNumber.setEnabled(true);
         mentorEmail.setEnabled(true);
@@ -229,9 +223,8 @@ public class CourseDetail extends AppCompatActivity {
         buildCancelButton();
         
         
-        saveNotesButton.setOnClickListener(null); // Remove click listener for saveNotesButton
+        saveNotesButton.setOnClickListener(null);
         
-        // Hide shareNotesButton in add mode
         ImageButton shareNotesButton = findViewById(R.id.shareNotesButton);
         shareNotesButton.setVisibility(View.INVISIBLE);
     }
@@ -250,7 +243,6 @@ public class CourseDetail extends AppCompatActivity {
                 if (userIsInteracting) {
                     new AlertDialog.Builder(CourseDetail.this).setTitle("Save Changes").setMessage("Do you want to save the changes?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            // Save the selected term
                             Term selectedTerm = (Term) termSpinner.getSelectedItem();
                             selectedCourse.setTermID_F(selectedTerm.getTermID());
                             repository.update(selectedCourse);
@@ -281,7 +273,6 @@ public class CourseDetail extends AppCompatActivity {
                     
                     new AlertDialog.Builder(CourseDetail.this).setTitle("Save Changes").setMessage("Do you want to save the changes?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            // Save the selected status
                             String status = statusSpinner.getSelectedItem().toString();
                             saveStatus(status);
                         }
@@ -326,7 +317,7 @@ public class CourseDetail extends AppCompatActivity {
     
     
     private void buildAlertActions() {
-        // Set the click listener for the start date bell icon
+        
         startDateAlert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -334,7 +325,7 @@ public class CourseDetail extends AppCompatActivity {
             }
         });
         
-        // Set the click listener for the end date bell icon
+        
         endDateAlert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -346,15 +337,16 @@ public class CourseDetail extends AppCompatActivity {
     private void handleDateAlertClick(TextView dateLabel, String startOrEnd, ImageButton button) {
         
         String alarmKeyDate = "Alarm_course_" + selectedCourse.getCourseID() + "_" + startOrEnd + "_date";
-        // Check if the alarm is already set for this date
+
         boolean isAlarmOn = ReminderManager.isReminderSet(this, alarmKeyDate);
         
         if (isAlarmOn) {
-            // Cancel the alarm
+          
+            
             ReminderManager.cancelReminder(this, alarmKeyDate);
             button.setImageResource(R.drawable.iconmonstr_bell_12);
         } else {
-            // Set the alarm
+        
             String dateStr = dateLabel.getText().toString();
             ReminderManager.setReminder(this, alarmKeyDate, dateStr);
             button.setImageResource(R.drawable.iconmonstr_bell_8);
@@ -450,32 +442,27 @@ public class CourseDetail extends AppCompatActivity {
         toast.show();
     }
     
-    // Method to load saved notes from SharedPreferences
     private void loadNotes() {
         SharedPreferences sharedPreferences = getSharedPreferences("NOTES", MODE_PRIVATE);
         String savedNotes = sharedPreferences.getString(String.valueOf(selectedCourse.getCourseID()), "");
         
-        // Display the saved notes in the EditText
         notesField.setText(savedNotes);
     }
     
     private String loadStatus() {
         SharedPreferences sharedPreferences = getSharedPreferences("COURSE_PREFS", MODE_PRIVATE);
-        return sharedPreferences.getString("status", "COURSE STATUS"); // Default value is "COURSE STATUS"
+        return sharedPreferences.getString("status", "COURSE STATUS");
     }
     
-    // Method to save notes to SharedPreferences
     private void saveNotes() {
         String notes = notesField.getText().toString();
         
         SharedPreferences sharedPreferences = getSharedPreferences("NOTES", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         
-        // Save the notes with the course ID as the key
         editor.putString(String.valueOf(selectedCourse.getCourseID()), notes);
         editor.apply();
         
-        // Provide feedback to the user
         showToast("Notes saved");
     }
     
@@ -511,7 +498,7 @@ public class CourseDetail extends AppCompatActivity {
                 return i;
             }
         }
-        return -1; // Term not found
+        return -1;
     }
     
     private int findStatusIndex(String status) {
@@ -520,7 +507,7 @@ public class CourseDetail extends AppCompatActivity {
                 return i;
             }
         }
-        return -1; // Status not found
+        return -1;
     }
     
     
@@ -530,12 +517,7 @@ public class CourseDetail extends AppCompatActivity {
         return mode == MODE_ADD;
     }
     
-    
-    /**
-     * Build and customize the ActionBar.
-     */
     private void buildActionBar() {
-        // Customize the elements of the ActionBar
         ImageView backButton = findViewById(R.id.back_button);
         TextView titleView = findViewById(R.id.actionbar_title);
         ImageView menuIcon = findViewById(R.id.menu_button);
@@ -563,9 +545,7 @@ public class CourseDetail extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem item) {
                         
                         if (isEditMode()) { // delete
-                            // Check if the course has associated assessments
                             if (courseHasAssessments(selectedCourse)) {
-                                // Alert the user about existing assessments
                                 showAlertForExistingAssessments();
                             } else {
                                 deleteCourse(selectedCourse);
@@ -590,31 +570,27 @@ public class CourseDetail extends AppCompatActivity {
         if (isAddMode()) {
             titleView.setText("New Course");
         } else {
-            // Set the title dynamically
             titleView.setText(selectedCourse.getCourseTitle());
         }
     }
     
-    // Check if the course has associated assessments (pseudocode)
     private boolean courseHasAssessments(Course course) {
         List<Assessment> assessments = repository.getAssessmentsByCourseID(course.getCourseID());
         return !assessments.isEmpty();
     }
-    
-    // Show an alert for existing assessments
+ 
     private void showAlertForExistingAssessments() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("This course has existing assessments. Please remove assessments first.")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // User acknowledged the alert, simply close the dialog
+                   
                         dialog.dismiss();
                     }
                 });
         builder.create().show();
     }
     
-    // Delete the course (pseudocode)
     private void deleteCourse(Course course) {
         repository.delete(course);
     }
@@ -622,12 +598,10 @@ public class CourseDetail extends AppCompatActivity {
     private void shareNotes() {
         String notes = notesField.getText().toString();
         
-        // Create an Intent to send text
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT, notes);
         
-        // Start an activity to show a list of available sharing apps
         startActivity(Intent.createChooser(shareIntent, "Share Notes"));
     }
     

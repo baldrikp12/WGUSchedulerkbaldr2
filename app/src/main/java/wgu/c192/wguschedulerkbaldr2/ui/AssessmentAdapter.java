@@ -26,12 +26,7 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.Co
         
     }
     
-    /**
-     * @param parent   The ViewGroup into which the new View will be added after it is bound to
-     *                 an adapter position.
-     * @param viewType The view type of the new View.
-     * @return new AssessmentViewHolder
-     */
+
     @NonNull
     @Override
     public CourseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -40,12 +35,6 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.Co
         return new CourseViewHolder((termItemView));
     }
     
-    
-    /**
-     * @param holder   The ViewHolder which should be updated to represent the contents of the
-     *                 item at the given position in the data set.
-     * @param position The position of the item within the adapter's data set.
-     */
     @Override
     public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
         if (mAssessments != null) {
@@ -64,9 +53,6 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.Co
         }
     }
     
-    /**
-     * @return mAssessments.size()
-     */
     @Override
     public int getItemCount() {
         return mAssessments.size();
@@ -88,9 +74,7 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.Co
             startDateView = itemView.findViewById(R.id.aStartDateLabel);
             endDateView = itemView.findViewById(R.id.aEndDateLabel);
             itemView.setOnClickListener(new View.OnClickListener() {
-                /**
-                 * @param v The view that was clicked.
-                 */
+              
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();

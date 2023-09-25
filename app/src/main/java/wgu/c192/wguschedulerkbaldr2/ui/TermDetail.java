@@ -81,12 +81,8 @@ public class TermDetail extends AppCompatActivity {
         addEditTermButton = findViewById(R.id.addEditBtn);
         cancelTermButton = findViewById(R.id.cancelBtn);
     }
-    
-    /**
-     * Build and customize the ActionBar.
-     */
+  
     private void buildActionBar() {
-        // Customize the elements of the ActionBar
         ImageView backButton = findViewById(R.id.back_button);
         TextView titleView = findViewById(R.id.actionbar_title);
         ImageView menuIcon = findViewById(R.id.menu_button);
@@ -114,9 +110,9 @@ public class TermDetail extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem item) {
                         
                         if (isEditMode()) { // delete
-                            // Check if the term has associated courses
+                            
                             if (termHasCourses(selectedTerm)) {
-                                // Alert the user about existing courses
+                               
                                 showAlertForExistingCourses();
                             } else {
                                 deleteTerm(selectedTerm);
@@ -141,7 +137,6 @@ public class TermDetail extends AppCompatActivity {
         if (isAddMode()) {
             titleView.setText("New Term");
         } else {
-            // Set the title dynamically
             titleView.setText(selectedTerm.getTermTitle());
         }
     }
@@ -151,7 +146,7 @@ public class TermDetail extends AppCompatActivity {
         builder.setMessage("This Term has existing courses. Please remove courses first.")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // User acknowledged the alert, simply close the dialog
+                       
                         dialog.dismiss();
                     }
                 });
@@ -231,18 +226,12 @@ public class TermDetail extends AppCompatActivity {
         cancelTermButton.setVisibility(View.VISIBLE);
         buildCancelButton();
     }
-    
-    /**
-     * Check and set the bell icons based on the alarms' status.
-     */
+
     private void setBellIcons() {
         setBellIcon(startDateAlert, "Start");
         setBellIcon(endDateAlert, "End");
     }
-    
-    /**
-     * Set the bell icon based on the alarm's status.
-     */
+ 
     private void setBellIcon(ImageButton button, String startOrEnd) {
         String alarmKeyEnabled = "Alarm_term_" + selectedTerm.getTermID() + "_" + startOrEnd + "_date";
         boolean isAlarmOn = ReminderManager.isReminderSet(this, alarmKeyEnabled);
@@ -255,7 +244,6 @@ public class TermDetail extends AppCompatActivity {
     }
     
     private void buildAlertActions() {
-        // Set the click listener for the start date bell icon
         startDateAlert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -263,7 +251,6 @@ public class TermDetail extends AppCompatActivity {
             }
         });
         
-        // Set the click listener for the end date bell icon
         endDateAlert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -275,15 +262,15 @@ public class TermDetail extends AppCompatActivity {
     private void handleDateAlertClick(TextView dateLabel, String startOrEnd, ImageButton button) {
         
         String alarmKeyDate = "Alarm_term_" + selectedTerm.getTermID() + "_" + startOrEnd + "_date";
-        // Check if the alarm is already set for this date
+
         boolean isAlarmOn = ReminderManager.isReminderSet(this, alarmKeyDate);
         
         if (isAlarmOn) {
-            // Cancel the alarm
+      
             ReminderManager.cancelReminder(this, alarmKeyDate);
             button.setImageResource(R.drawable.iconmonstr_bell_12);
         } else {
-            // Set the alarm
+  
             String dateStr = dateLabel.getText().toString();
             ReminderManager.setReminder(this, alarmKeyDate, dateStr);
             button.setImageResource(R.drawable.iconmonstr_bell_8);

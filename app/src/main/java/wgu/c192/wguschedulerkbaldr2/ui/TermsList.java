@@ -32,24 +32,20 @@ public class TermsList extends AppCompatActivity {
         TextView titleView = findViewById(R.id.plain_actionbar_title);
         titleView.setText("Your Terms");
         
-        
-        // Initialize RecyclerView and its adapter
         recyclerView = findViewById(R.id.termrecyclerview);
         termAdapter = new TermAdapter(this);
         recyclerView.setAdapter(termAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         
-        // Initialize Repository and fetch all terms
         repository = new Repository(getApplication());
         List<Term> allTerms = repository.getAllTerms();
         termAdapter.setTerms(allTerms);
         
-        // Set up FloatingActionButton to add a new term
         FloatingActionButton addTermBtn = findViewById(R.id.floatingActionButton);
         addTermBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Start TermDetail activity in "Add" mode
+          
                 Intent intent = new Intent(TermsList.this, TermDetail.class);
                 intent.putExtra(TermDetail.MODE_KEY, TermDetail.MODE_ADD);
                 intent.putExtra("TERM_ID", -1);
@@ -57,7 +53,6 @@ public class TermsList extends AppCompatActivity {
             }
         });
         
-        // Set up FloatingActionButton to go back
         FloatingActionButton backFAB = findViewById(R.id.backFAB);
         backFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +66,6 @@ public class TermsList extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Refresh the list of terms when the activity resumes
         List<Term> allTerms = repository.getAllTerms();
         termAdapter.setTerms(allTerms);
     }

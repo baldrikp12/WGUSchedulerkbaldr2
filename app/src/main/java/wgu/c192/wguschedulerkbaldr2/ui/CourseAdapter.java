@@ -25,13 +25,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         this.context = context;
         
     }
-    
-    /**
-     * @param parent   The ViewGroup into which the new View will be added after it is bound to
-     *                 an adapter position.
-     * @param viewType The view type of the new View.
-     * @return new CourseViewHolder
-     */
+
     @NonNull
     @Override
     public CourseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -39,13 +33,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         
         return new CourseViewHolder((courseItemView));
     }
-    
-    
-    /**
-     * @param holder   The ViewHolder which should be updated to represent the contents of the
-     *                 item at the given position in the data set.
-     * @param position The position of the item within the adapter's data set.
-     */
+
     @Override
     public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
         if (mCourses != null) {
@@ -63,10 +51,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
             holder.endDateView.setText("N/A");
         }
     }
-    
-    /**
-     * @return mCourses.size()
-     */
+ 
     @Override
     public int getItemCount() {
         return mCourses.size();
@@ -88,9 +73,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
             startDateView = itemView.findViewById(R.id.cStartDateLabel);
             endDateView = itemView.findViewById(R.id.cEndDateLabel);
             itemView.setOnClickListener(new View.OnClickListener() {
-                /**
-                 * @param v The view that was clicked.
-                 */
+
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();

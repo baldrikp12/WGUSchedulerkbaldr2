@@ -37,15 +37,6 @@ public class Course {
         this.mentEmail = mentEmail;
     }
     
-    public Course(String courseTitle, String startDate, String endDate, String mentName, String mentNumber, String mentEmail) {
-        this.courseTitle = courseTitle;
-        this.courseStart = startDate;
-        this.courseEnd = endDate;
-        this.mentName = mentName;
-        this.mentNumber = mentNumber;
-        this.mentEmail = mentEmail;
-    }
-    
     public Course() {
     
     }
@@ -124,6 +115,6 @@ public class Course {
     
     @Override
     public String toString() {
-        return this.getCourseTitle(); // assuming 'title' is the name of your term's title variable
+        return this.getCourseTitle();
     }
 }

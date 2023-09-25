@@ -14,7 +14,8 @@
         android:theme="@style/Theme.WGUSchedulerkbaldr2"
         tools:targetApi="31">
 
-        <receiver android:name=".util.ReminderReceiver"
+        <receiver
+            android:name=".util.ReminderReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -26,18 +27,14 @@
             android:name=".ui.TermDetail"
             android:exported="false"
             android:label="@string/title_activity_term_detail"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Theme.WGUSchedulerkbaldr2" />
+            android:theme="@style/Theme.WGUSchedulerkbaldr2"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.TermsList"
             android:exported="false"
             android:label="@string/title_activity_term_list"
             android:theme="@style/Theme.WGUSchedulerkbaldr2" />
-        <activity
-            android:name=".ui.CourseListFragment"
-            android:exported="false"
-            android:label="CourseFragmentList"
-            android:theme="@style/Theme.WGUSchedulerkbaldr2" />
+
         <activity
             android:name=".ui.CourseDetail"
             android:exported="false"
@@ -48,11 +45,7 @@
             android:exported="false"
             android:label="Courses List"
             android:theme="@style/Theme.WGUSchedulerkbaldr2" />
-        <activity
-            android:name=".ui.AssessmentListFragment"
-            android:exported="false"
-            android:label="AssessmentFragmentList"
-            android:theme="@style/Theme.WGUSchedulerkbaldr2" />
+
         <activity
             android:name=".ui.AssessmentList"
             android:exported="false"
@@ -62,8 +55,8 @@
             android:name=".ui.AssessmentDetail"
             android:exported="false"
             android:label="Assessment Details"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Theme.WGUSchedulerkbaldr2" />
+            android:theme="@style/Theme.WGUSchedulerkbaldr2"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.MainActivity"
             android:exported="true">

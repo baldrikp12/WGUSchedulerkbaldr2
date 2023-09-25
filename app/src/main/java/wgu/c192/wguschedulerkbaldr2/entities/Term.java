@@ -66,6 +66,6 @@ public class Term {
     
     @Override
     public String toString() {
-        return this.getTermTitle(); // assuming 'title' is the name of your term's title variable
+        return this.getTermTitle();
     }
 }

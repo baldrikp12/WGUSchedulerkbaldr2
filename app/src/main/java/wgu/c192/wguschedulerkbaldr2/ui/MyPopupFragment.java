@@ -22,7 +22,6 @@ public class MyPopupFragment extends DialogFragment {
     
         view.findViewById(R.id.include).setVisibility(View.INVISIBLE);
         
-        // Create a bundle with arguments
         Bundle args = new Bundle();
         args.putInt("courseID", courseID);
     
