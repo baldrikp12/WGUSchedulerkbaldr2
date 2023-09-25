@@ -223,6 +223,11 @@ public class TermDetail extends AppCompatActivity {
         startDate.setEnabled(true);
         endDate.setEnabled(true);
         addEditTermButton.setVisibility(View.VISIBLE);
+        if(isAddMode()){
+            addEditTermButton.setText("Add");
+        } else if(isEditMode()){
+            addEditTermButton.setText("Edit");
+        }
         cancelTermButton.setVisibility(View.VISIBLE);
         buildCancelButton();
     }

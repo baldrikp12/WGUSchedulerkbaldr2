@@ -186,7 +186,7 @@ public class AssessmentDetail extends AppCompatActivity {
             courseSpinner.setSelection(selectedCourseIndex);
             previousCourseSpinnerSelection = courseSpinner.getSelectedItemPosition();
         }
-        
+        assessmentType.setChecked(selectedAssessment.getAssessmentType());
         startDate.setText(assessment.getStartDate());
         endDate.setText(assessment.getEndDate());
         
@@ -209,7 +209,7 @@ public class AssessmentDetail extends AppCompatActivity {
         if (selectedTermIndex != -1) {
             courseSpinner.setSelection(selectedTermIndex);
         }
-        
+        assessmentType.setChecked(selectedAssessment.getAssessmentType());
         startDate.setText(assessment.getStartDate());
         endDate.setText(assessment.getEndDate());
         addEditAssessmentButton.setText("Update");
@@ -233,17 +233,12 @@ public class AssessmentDetail extends AppCompatActivity {
         buildCancelButton();
     }
     
-    /**
-     * Check and set the bell icons based on the alarms' status.
-     */
+
     private void setBellIcons() {
         setBellIcon(startDateAlert, "Start");
         setBellIcon(endDateAlert, "End");
     }
     
-    /**
-     * Set the bell icon based on the alarm's status.
-     */
     private void setBellIcon(ImageButton button, String startOrEnd) {
         String alarmKeyEnabled = "Alarm_assessment_" + selectedAssessment.getAssessmentID() + "_" + startOrEnd + "_date";
         boolean isAlarmOn = ReminderManager.isReminderSet(this, alarmKeyEnabled);

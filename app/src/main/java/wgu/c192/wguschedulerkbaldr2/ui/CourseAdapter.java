@@ -49,11 +49,18 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     @Override
     public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
         if (mCourses != null) {
-            Course currentCourse = mCourses.get(position);
-            String name = currentCourse.getCourseTitle();
+            Course currentTerm = mCourses.get(position);
+            String name = currentTerm.getCourseTitle();
+            String start = currentTerm.getCourseStart();
+            String end = currentTerm.getCourseEnd();
             holder.courseNameView.setText(name);
+            holder.startDateView.setText(start);
+            holder.endDateView.setText(end);
+        
         } else {
-            holder.courseNameView.setText("No Courses");
+            holder.courseNameView.setText("N/A");
+            holder.startDateView.setText("N/A");
+            holder.endDateView.setText("N/A");
         }
     }
     
@@ -72,10 +79,14 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     
     class CourseViewHolder extends RecyclerView.ViewHolder {
         private final TextView courseNameView;
+        private final TextView startDateView;
+        private final TextView endDateView;
         
         private CourseViewHolder(View itemView) {
             super(itemView);
             courseNameView = itemView.findViewById(R.id.courseNameLabel);
+            startDateView = itemView.findViewById(R.id.cStartDateLabel);
+            endDateView = itemView.findViewById(R.id.cEndDateLabel);
             itemView.setOnClickListener(new View.OnClickListener() {
                 /**
                  * @param v The view that was clicked.

@@ -51,9 +51,16 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.Co
         if (mAssessments != null) {
             Assessment currentAssessment = mAssessments.get(position);
             String name = currentAssessment.getAssessmentTitle();
+            String start = currentAssessment.getStartDate();
+            String end = currentAssessment.getEndDate();
             holder.assessmentNameView.setText(name);
+            holder.startDateView.setText(start);
+            holder.endDateView.setText(end);
+        
         } else {
-            holder.assessmentNameView.setText("No Assessments");
+            holder.assessmentNameView.setText("N/A");
+            holder.startDateView.setText("N/A");
+            holder.endDateView.setText("N/A");
         }
     }
     
@@ -72,10 +79,14 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.Co
     
     class CourseViewHolder extends RecyclerView.ViewHolder {
         private final TextView assessmentNameView;
-        
+        private final TextView startDateView;
+        private final TextView endDateView;
+    
         private CourseViewHolder(View itemView) {
             super(itemView);
             assessmentNameView = itemView.findViewById(R.id.assessmentNameLabel);
+            startDateView = itemView.findViewById(R.id.aStartDateLabel);
+            endDateView = itemView.findViewById(R.id.aEndDateLabel);
             itemView.setOnClickListener(new View.OnClickListener() {
                 /**
                  * @param v The view that was clicked.

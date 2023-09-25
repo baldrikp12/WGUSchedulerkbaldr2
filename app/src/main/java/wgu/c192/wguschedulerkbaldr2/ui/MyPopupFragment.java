@@ -20,6 +20,8 @@ public class MyPopupFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_assessment_list, container, false);
     
+        view.findViewById(R.id.include).setVisibility(View.INVISIBLE);
+        
         // Create a bundle with arguments
         Bundle args = new Bundle();
         args.putInt("courseID", courseID);
