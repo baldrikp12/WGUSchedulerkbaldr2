@@ -274,10 +274,11 @@
             </androidx.cardview.widget.CardView>
 
             <Button
-                android:id="@+id/show_popup_button"
+                android:id="@+id/assessmentPopupButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
+                android:onClick="OnShowPopupButtonClick"
                 android:text="ASSESSMENTS" />
 
             <TextView

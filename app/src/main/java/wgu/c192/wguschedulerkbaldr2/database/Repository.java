@@ -28,6 +28,7 @@ public class Repository {
     private AssessmentDAO mAssessmentDAO;
     
     private List<Assessment> mAllAssessments;
+    private Assessment mAssessment;
     
     public Repository(Application application) {
         SchedulerDatabaseBuilder db = SchedulerDatabaseBuilder.getDatabase(application);
@@ -226,7 +227,17 @@ public class Repository {
         }
         return mAllAssessments;
     }
-    
+    public Assessment getAssociatedAssessment(int assessmentID) {
+        databaseExecutor.execute(() -> {
+            mAssessment = mAssessmentDAO.getAssociatedAssessment(assessmentID);
+        });
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return mAssessment;
+    }
     @Override
     public String toString() {
         return "I AM NOT NULL"; // assuming 'title' is the name of your term's title variable

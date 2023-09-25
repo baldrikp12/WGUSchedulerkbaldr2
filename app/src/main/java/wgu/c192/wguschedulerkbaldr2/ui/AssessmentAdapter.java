@@ -14,19 +14,18 @@ import java.util.List;
 
 import wgu.c192.wguschedulerkbaldr2.R;
 import wgu.c192.wguschedulerkbaldr2.entities.Assessment;
-import wgu.c192.wguschedulerkbaldr2.entities.Course;
 
 public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.CourseViewHolder> {
     private final Context context;
     private final LayoutInflater mInflater;
     private List<Assessment> mAssessments;
-
+    
     public AssessmentAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
         this.context = context;
-
+        
     }
-
+    
     /**
      * @param parent   The ViewGroup into which the new View will be added after it is bound to
      *                 an adapter position.
@@ -36,12 +35,12 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.Co
     @NonNull
     @Override
     public CourseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View termItemView = mInflater.inflate(R.layout.term_list_item, parent, false);
-
+        View termItemView = mInflater.inflate(R.layout.assessment_list_item, parent, false);
+        
         return new CourseViewHolder((termItemView));
     }
-
-
+    
+    
     /**
      * @param holder   The ViewHolder which should be updated to represent the contents of the
      *                 item at the given position in the data set.
@@ -50,15 +49,14 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.Co
     @Override
     public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
         if (mAssessments != null) {
-            System.out.println("not null");
             Assessment currentAssessment = mAssessments.get(position);
             String name = currentAssessment.getAssessmentTitle();
             holder.assessmentNameView.setText(name);
         } else {
-            holder.assessmentNameView.setText("No Terms");
+            holder.assessmentNameView.setText("No Assessments");
         }
     }
-
+    
     /**
      * @return mAssessments.size()
      */
@@ -66,18 +64,18 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.Co
     public int getItemCount() {
         return mAssessments.size();
     }
-
+    
     public void setAssessments(List<Assessment> assessment) {
         mAssessments = assessment;
         notifyDataSetChanged();
     }
-
+    
     class CourseViewHolder extends RecyclerView.ViewHolder {
         private final TextView assessmentNameView;
-
+        
         private CourseViewHolder(View itemView) {
             super(itemView);
-            assessmentNameView = itemView.findViewById(R.id.termNameLabel);
+            assessmentNameView = itemView.findViewById(R.id.assessmentNameLabel);
             itemView.setOnClickListener(new View.OnClickListener() {
                 /**
                  * @param v The view that was clicked.
@@ -85,12 +83,15 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.Co
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    final Assessment currentAssessment = mAssessments.get(position);
-                    Intent intent = new Intent(context, AssessmentDetail.class);
-                    intent.putExtra("id", currentAssessment.getAssessmentID());
-                    intent.putExtra("name", currentAssessment.getAssessmentTitle());
-                    context.startActivity(intent);
-
+                    if (position != RecyclerView.NO_POSITION) {
+                        Assessment currentAssessment = mAssessments.get(position);
+                        
+                        Intent intent = new Intent(context, AssessmentDetail.class);
+                        intent.putExtra(TermDetail.MODE_KEY, TermDetail.MODE_VIEW);
+                        intent.putExtra("ASSESSMENT_ID", currentAssessment.getAssessmentID());
+                        context.startActivity(intent);
+                    }
+                    
                 }
             });
         }

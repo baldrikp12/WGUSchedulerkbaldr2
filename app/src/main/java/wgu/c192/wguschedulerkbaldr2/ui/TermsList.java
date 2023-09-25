@@ -3,6 +3,7 @@ package wgu.c192.wguschedulerkbaldr2.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,6 +29,10 @@ public class TermsList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_terms_list);
         
+        TextView titleView = findViewById(R.id.plain_actionbar_title);
+        titleView.setText("Your Terms");
+        
+        
         // Initialize RecyclerView and its adapter
         recyclerView = findViewById(R.id.termrecyclerview);
         termAdapter = new TermAdapter(this);
@@ -47,6 +52,7 @@ public class TermsList extends AppCompatActivity {
                 // Start TermDetail activity in "Add" mode
                 Intent intent = new Intent(TermsList.this, TermDetail.class);
                 intent.putExtra(TermDetail.MODE_KEY, TermDetail.MODE_ADD);
+                intent.putExtra("TERM_ID", -1);
                 startActivity(intent);
             }
         });

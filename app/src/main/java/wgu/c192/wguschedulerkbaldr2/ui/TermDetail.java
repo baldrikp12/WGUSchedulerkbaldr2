@@ -53,6 +53,7 @@ public class TermDetail extends AppCompatActivity {
     private DatePickerDialog endDatePicker;
     private Repository repository = new Repository(getApplication());
     int mode;
+    private boolean isInitialized = false;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,7 +168,6 @@ public class TermDetail extends AppCompatActivity {
     }
     
     private void initializeTermData(int termId, int mode) {
-        Repository repository = new Repository(getApplication());
         
         if (termId != -1) {
             selectedTerm = repository.getAssociatedTerm(termId);
@@ -180,6 +180,7 @@ public class TermDetail extends AppCompatActivity {
         } else {
             setEditMode(selectedTerm);
         }
+        setFragmentArguments(termId);
     }
     
     private void setViewMode(Term term) {
@@ -188,10 +189,10 @@ public class TermDetail extends AppCompatActivity {
         startDate.setText(term.getStartDate());
         endDate.setText(term.getEndDate());
         
-        setFragmentArguments(term.getTermID());
-        
         setUIReadOnly();
         setBellIcons();
+        isInitialized = true;
+        
     }
     
     private void setAddMode() {
@@ -204,8 +205,6 @@ public class TermDetail extends AppCompatActivity {
         
         startDate.setText(term.getStartDate());
         endDate.setText(term.getEndDate());
-        
-        setFragmentArguments(term.getTermID());
         
         setUIEditable();
         
@@ -369,6 +368,7 @@ public class TermDetail extends AppCompatActivity {
         Bundle args = new Bundle();
         args.putInt("termID", termID);
         fragment.setArguments(args);
+        
     }
     
     private void buildCancelButton() {
@@ -396,7 +396,9 @@ public class TermDetail extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        recreateCourseListFragment();
+        if (isInitialized) {
+            recreateCourseListFragment();
+        }
     }
     
     private void recreateCourseListFragment() {

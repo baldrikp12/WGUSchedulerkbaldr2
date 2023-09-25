@@ -23,7 +23,7 @@ public class Course {
     private String mentNumber;
     @Nullable
     private String mentEmail;
-
+    
     @Nullable
     private Integer termID_f;
     
@@ -120,5 +120,10 @@ public class Course {
     
     public void setCourseTitle(String courseTitle) {
         this.courseTitle = courseTitle;
+    }
+    
+    @Override
+    public String toString() {
+        return this.getCourseTitle(); // assuming 'title' is the name of your term's title variable
     }
 }

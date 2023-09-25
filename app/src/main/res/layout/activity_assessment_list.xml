@@ -6,6 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".ui.CourseList">
 
+    <include
+        android:id="@+id/include"
+        layout="@layout/custom_action_bar_plain"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/assessmentfragmentcontainter"
+        android:name="wgu.c192.wguschedulerkbaldr2.ui.AssessmentListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include"
+        tools:layout="@layout/fragment_assessment_list" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/backFAB3"
         android:layout_width="wrap_content"
@@ -28,11 +44,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_input_add" />
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/assessmentfragmentcontainter"
-        android:name="wgu.c192.wguschedulerkbaldr2.ui.AssessmentListFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="93dp"
-        tools:layout_editor_absoluteY="158dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

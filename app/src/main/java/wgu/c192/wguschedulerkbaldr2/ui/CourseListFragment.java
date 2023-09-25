@@ -40,14 +40,15 @@ public class CourseListFragment extends Fragment {
         Bundle arguments = this.getArguments();
         
         int termID = 0;
+        
         if (arguments != null) {
             termID = arguments.getInt("termID");
-            
         }
         
         if (termID == 0) {
             allCourses.addAll(repository.getAllCourses());
         } else {
+
             allCourses.addAll(repository.getCoursesByTermID(termID));
         }
         
@@ -56,4 +57,5 @@ public class CourseListFragment extends Fragment {
         
         return view;
     }
+    
 }

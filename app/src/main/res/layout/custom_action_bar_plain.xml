@@ -13,17 +13,6 @@
         android:layout_height="match_parent"
         android:gravity="top">
 
-        <ImageButton
-            android:id="@+id/back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="11dp"
-            android:background="#00FFFFFF"
-            app:srcCompat="@drawable/iconmonstr_arrow_left_alt_filled" />
-
         <HorizontalScrollView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -33,7 +22,7 @@
             android:scrollbars="none">
 
             <TextView
-                android:id="@+id/actionbar_title"
+                android:id="@+id/plain_actionbar_title"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:duplicateParentState="true"
@@ -53,17 +42,6 @@
                 android:textSize="34sp" />
 
         </HorizontalScrollView>
-
-        <ImageButton
-            android:id="@+id/menu_button"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="11dp"
-            android:backgroundTint="#00FFFFFF"
-            app:srcCompat="@drawable/iconmonstr_menu_lined" />
 
     </RelativeLayout>
 

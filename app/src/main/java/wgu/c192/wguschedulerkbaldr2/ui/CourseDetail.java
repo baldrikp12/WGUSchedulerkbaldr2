@@ -60,11 +60,11 @@ public class CourseDetail extends AppCompatActivity {
     private ImageButton endDateAlert;
     private EditText notesField;
     private ImageButton saveNotesButton;
+    private Button show_popup_button;
     private EditText mentorName;
     private EditText mentorNumber;
     private EditText mentorEmail;
-    
-    private Repository repository = new Repository(getApplication());
+    private final Repository repository = new Repository(getApplication());
     private Spinner termSpinner;
     private Spinner statusSpinner;
     private boolean userIsInteracting = false;
@@ -101,22 +101,23 @@ public class CourseDetail extends AppCompatActivity {
      * Initialize UI elements and set click listeners.
      */
     private void initializeUIElements() {
-        course_text_input_layout = findViewById(R.id.course_text_input_layout);
-        courseTitleEditText = findViewById(R.id.courseTitleTextview);
-        course_text_input_layout = findViewById(R.id.course_text_input_layout);
-        addEditCourseButton = findViewById(R.id.addEditBtn);
-        cancelCourseButton = findViewById(R.id.cancelBtn);
-        startDate = findViewById(R.id.courseStartDateLabel);
-        endDate = findViewById(R.id.courseEndDateLabel);
-        startDateAlert = findViewById(R.id.startDateAlert);
-        endDateAlert = findViewById(R.id.endDateAlert);
-        notesField = findViewById(R.id.notesField);
-        saveNotesButton = findViewById(R.id.saveNotesButton);
-        termSpinner = findViewById(R.id.term_spinner);
-        statusSpinner = findViewById(R.id.status_spinner);
-        mentorName = findViewById(R.id.mentorNameField);
-        mentorNumber = findViewById(R.id.mentorPhoneField);
-        mentorEmail = findViewById(R.id.mentorEMailField);
+        this.course_text_input_layout = findViewById(R.id.course_text_input_layout);
+        this.courseTitleEditText = findViewById(R.id.courseTitleTextview);
+        this.course_text_input_layout = findViewById(R.id.course_text_input_layout);
+        this.addEditCourseButton = findViewById(R.id.addEditBtn);
+        this.cancelCourseButton = findViewById(R.id.cancelBtn);
+        this.startDate = findViewById(R.id.courseStartDateLabel);
+        this.endDate = findViewById(R.id.courseEndDateLabel);
+        this.startDateAlert = findViewById(R.id.startDateAlert);
+        this.endDateAlert = findViewById(R.id.endDateAlert);
+        this.notesField = findViewById(R.id.notesField);
+        this.saveNotesButton = findViewById(R.id.saveNotesButton);
+        this.show_popup_button = findViewById(R.id.assessmentPopupButton);
+        this.termSpinner = findViewById(R.id.term_spinner);
+        this.statusSpinner = findViewById(R.id.status_spinner);
+        this.mentorName = findViewById(R.id.mentorNameField);
+        this.mentorNumber = findViewById(R.id.mentorPhoneField);
+        this.mentorEmail = findViewById(R.id.mentorEMailField);
         
         // Initialize the Spinner
         List<Term> termList = repository.getAllTerms();
@@ -176,6 +177,8 @@ public class CourseDetail extends AppCompatActivity {
         setTermSpinnerListener();
         setStatusSpinnerListener();
         setBellIcons();
+        
+        
     }
     
     private void setEditMode(Course course) {
@@ -428,15 +431,17 @@ public class CourseDetail extends AppCompatActivity {
                 repository.update(selectedCourse);
             }
             
-            Intent viewIntent = new Intent(CourseDetail.this, CourseList.class);
-            viewIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(viewIntent);
-            
-            
-            finish();
+            navigateToCourseList();
         } else {
             showToast("Title cannot be blank");
         }
+    }
+    
+    private void navigateToCourseList() {
+        Intent viewIntent = new Intent(CourseDetail.this, CourseList.class);
+        viewIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(viewIntent);
+        finish();
     }
     
     private void showToast(String theMessage) {
@@ -624,6 +629,13 @@ public class CourseDetail extends AppCompatActivity {
         
         // Start an activity to show a list of available sharing apps
         startActivity(Intent.createChooser(shareIntent, "Share Notes"));
+    }
+    
+    public void OnShowPopupButtonClick(View view) {
+        if (!isAddMode() && !isEditMode()) {
+            MyPopupFragment popupFragment = new MyPopupFragment(selectedCourse.getCourseID());
+            popupFragment.show(getSupportFragmentManager(), "MyPopupFragment");
+        }
     }
     
 }

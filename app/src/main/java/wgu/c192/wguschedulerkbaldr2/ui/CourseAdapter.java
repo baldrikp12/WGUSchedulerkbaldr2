@@ -19,13 +19,13 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     private final Context context;
     private final LayoutInflater mInflater;
     private List<Course> mCourses;
-
+    
     public CourseAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
         this.context = context;
-
+        
     }
-
+    
     /**
      * @param parent   The ViewGroup into which the new View will be added after it is bound to
      *                 an adapter position.
@@ -36,11 +36,11 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     @Override
     public CourseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View courseItemView = mInflater.inflate(R.layout.course_list_item, parent, false);
-
+        
         return new CourseViewHolder((courseItemView));
     }
-
-
+    
+    
     /**
      * @param holder   The ViewHolder which should be updated to represent the contents of the
      *                 item at the given position in the data set.
@@ -53,10 +53,10 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
             String name = currentCourse.getCourseTitle();
             holder.courseNameView.setText(name);
         } else {
-            holder.courseNameView.setText("No Terms");
+            holder.courseNameView.setText("No Courses");
         }
     }
-
+    
     /**
      * @return mCourses.size()
      */
@@ -64,18 +64,18 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     public int getItemCount() {
         return mCourses.size();
     }
-
+    
     public void setCourses(List<Course> courses) {
         mCourses = courses;
         notifyDataSetChanged();
     }
-
+    
     class CourseViewHolder extends RecyclerView.ViewHolder {
         private final TextView courseNameView;
-
+        
         private CourseViewHolder(View itemView) {
             super(itemView);
-            courseNameView = itemView.findViewById(R.id.termNameLabel);
+            courseNameView = itemView.findViewById(R.id.courseNameLabel);
             itemView.setOnClickListener(new View.OnClickListener() {
                 /**
                  * @param v The view that was clicked.
@@ -85,7 +85,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         Course currentCourse = mCourses.get(position);
-
+                        
                         Intent intent = new Intent(context, CourseDetail.class);
                         intent.putExtra(TermDetail.MODE_KEY, TermDetail.MODE_VIEW);
                         intent.putExtra("COURSE_ID", currentCourse.getCourseID());

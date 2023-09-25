@@ -4,40 +4,28 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "assessment")
+@Entity(tableName = "ASSESSMENT")
 public class Assessment {
     
     @PrimaryKey(autoGenerate = true)
     @NonNull
     private int assessmentID;
     private String assessmentTitle;
+    private String startDate;
+    private String endDate;
+    private boolean assessmentType;
     private int courseID_f;
     
-    // Additional Fields
-    private String dueDate;
-    private String type;
-    private String description;
-    
-    // Fields for assessment type
-    private boolean isObjective; // True for objective, False for performance
-    
-    public Assessment(String assessmentTitle, int courseID_f) {
+    public Assessment(String assessmentTitle, String startDate, String endDate, boolean assessmentType, int courseID_f) {
         this.assessmentTitle = assessmentTitle;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.assessmentType = assessmentType;
         this.courseID_f = courseID_f;
     }
     
     // Default Constructor
     public Assessment() {
-        // Set default values if needed
-        this.courseID_f = 0; // Default value
-    }
-    
-    public int getCourseID_F() {
-        return courseID_f;
-    }
-    
-    public void setCourseID_F(int courseID_F) {
-        this.courseID_f = courseID_F;
     }
     
     public int getAssessmentID() {
@@ -56,35 +44,37 @@ public class Assessment {
         this.assessmentTitle = assessmentTitle;
     }
     
-    public String getDueDate() {
-        return dueDate;
+    public String getStartDate() {
+        return startDate;
     }
     
-    public void setDueDate(String dueDate) {
-        this.dueDate = dueDate;
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
     }
     
-    public String getType() {
-        return type;
+    public String getEndDate() {
+        return endDate;
     }
     
-    public void setType(String type) {
-        this.type = type;
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
     
-    public String getDescription() {
-        return description;
+    public boolean getAssessmentType() {
+        return assessmentType;
     }
     
-    public void setDescription(String description) {
-        this.description = description;
+    public void setAssessmentType(boolean assessmentType) {
+        this.assessmentType = assessmentType;
     }
     
-    public boolean isObjective() {
-        return isObjective;
+    public int getCourseID_f() {
+        return courseID_f;
     }
     
-    public void setObjective(boolean objective) {
-        isObjective = objective;
+    public void setCourseID_f(int courseID_f) {
+        this.courseID_f = courseID_f;
     }
+    
+    
 }
