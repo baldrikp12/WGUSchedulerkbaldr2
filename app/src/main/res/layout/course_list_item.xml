@@ -53,7 +53,7 @@
         <!-- First CardView (stacked on top of the second one) -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView1"
-            android:layout_width="229dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             app:cardBackgroundColor="#AEE47F"
@@ -118,6 +118,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
                     android:gravity="center"
                     android:orientation="vertical">
 

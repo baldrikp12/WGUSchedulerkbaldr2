@@ -14,7 +14,7 @@
         android:gravity="top">
 
         <HorizontalScrollView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginEnd="8dp"
             android:layout_toStartOf="@+id/menu_button"
@@ -26,11 +26,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:duplicateParentState="true"
-                android:ellipsize="none"
-                android:focusable="true"
+                android:ellipsize="end"
                 android:focusableInTouchMode="true"
-                android:importantForAccessibility="yes"
-                android:marqueeRepeatLimit="marquee_forever"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:scrollbars="horizontal"
